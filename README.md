@@ -90,6 +90,7 @@ namedAttributes and namedEvents in mixins are respected:
     person.triggerSelect();
 
 Additionally, Brace composes 
+
 - initialize() on all objects, and
 - defaults and validate() on models
 
