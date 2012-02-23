@@ -7,7 +7,7 @@ Brace is an extension to [Backbone](http://backbonejs.org) that adds mixins and 
 Brace allows:
 
 - "namedEvents" on Models, Collections, Views and Routers, which is a collection of exposed events
-- "namedAttributes" on Models, which is a collection of exposed attributes (ie a schema)
+- "namedAttributes" on Models, which is a collection of exposed attributes - ie a model schema
 
 Both namedEvents and namedAttributes are arrays of strings.
 
@@ -89,7 +89,9 @@ namedAttributes and namedEvents in mixins are respected:
     person.getSelected();
     person.triggerSelect();
 
-Additionally, Brace composes the initialize() methods on all objects, and defaults and validate() on models.
+Additionally, Brace composes 
+- initialize() on all objects, and
+- defaults and validate() on models
 
 All other name clashes between mixins fail violently and forcefully *at class declaration time* (not at instance construction time).
 
