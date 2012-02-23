@@ -4,46 +4,92 @@ Brace is an extension to Backbone (http://backbonejs.org) that adds mixins and s
 
 ## Self-documenting attributes and events
 
-Brace adds:
+Brace allows:
 
 - "namedEvents" to Models, Collections, Views and Routers
-- "namedAttributes" property to Models
+- "namedAttributes" to Models
 
-    var MaleModel = Brace.Model.extend({
-        namedAttributes: ["look"],
-        namedEvents: ["think"]
+Both namedEvents and namedAttributes are arrays of strings.
+
+    var Person = Brace.Model.extend({
+        namedAttributes: ["name"],
+        namedEvents: ["sleep"]
     });
 
-    // for each attribute in namedAttributes, get[Attribute] and set[Attribute] methods are generated
+For each attribute in namedAttributes, get[Attribute] and set[Attribute] methods are generated
 
-    var zoolander = new MaleModel();
-    zoolander.setLook("Blue Steel");
-    zoolander.getLook() // Returns "Blue Steel"
+    var person = new Person();
+    person.setName("Tim");
+    person.getName() // Returns "Tim"
 
-    // get() and set() validate attributes
+Backbone models' get() and set() validate attributes
 
-    zoolander.get("look"); "Blue Steel"
-    zoolander.set("look", "Le Tigre"); // ok
-    zoolander.set({
-        look: "Ferrari"
+    person.get("name"); "Time"
+    person.set("name", "Timmy"); // ok
+    person.set({
+        name: "Timothy"
     }); // ok
-
-    zoolander.get("lost"); // throws exception
-    zoolander.set("lost", "frequently"); // throws exception
-    zoolander.set({
+    
+    person.get("lost"); // throws exception
+    person.set("lost", "frequently"); // throws exception
+    person.set({
         lost: "frequently"
     }); // throws exception
-
-    // for each event in namedEvents, on[Event] and trigger[Event] methods are generated
-
-    zoolander.onThink(function(idea) { console.log(idea);} );
-    zoolander.triggerThink("Ow");
+    
+For each event in namedEvents, on[Event] and trigger[Event] methods are generated
+    
+    person.onSleep(function(dream) { console.log("Dreaming about " + dream); } );
+    person.triggerSleep("Unicorns");
 
 
 ## Mixins
 
-    var MyMixin = {
-        name: "hi"
+Brace allows a "mixins" property on models, views, collections and routers.
+
+    var Loggable = {
+        log: function(msg) {
+	    console.log(msg);
+	}
+    };
+    
+    var Person = Brace.View.extend({
+        mixins: [Loggable],
+        
+        initialize: function() {
+            this.log("Initialized");
+        }
+    });
+
+
+## Mixins with Backbone
+
+namedAttributes and namedEvents in mixins are respected.
+
+    var Selectable = {
+        namedAttributes: ["selected"],
+        namedEvents: ["select"],
+
+        initialize: function() {
+            this.on("change:selected", _.bind(function(model, selected) {
+                if (selected) {
+                    this.triggerSelect();
+                }
+            }, this));
+        }
     };
 
+    var Person = Brace.Model.extend({
+        mixins: [Selectable]
+    });
+    
+    var person = new Person();
+
+    person.onSelect(function() { console.log("selected"); });
+    person.setSelected(true);
+    person.getSelected();
+    person.triggerSelect();
+
+Additionally, Brace composes the initialize() methods on all objects, and defaults and validate() on models.
+
+All other name clashes fail violently and forcefully *at class declaration time* (not at instance construction time).
 
