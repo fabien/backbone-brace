@@ -1,6 +1,6 @@
 # Backbone.Brace
 
-Brace is an extension to Backbone (http://backbonejs.org) that adds mixins and self-documenting attributes & events.
+Brace is an extension to [Backbone](http://backbonejs.org) that adds mixins and self-documenting attributes & events.
 
 ## Self-documenting attributes and events
 
@@ -48,8 +48,8 @@ Brace allows a "mixins" property on models, views, collections and routers.
 
     var Loggable = {
         log: function(msg) {
-	    console.log(msg);
-	}
+            console.log(msg);
+        }
     };
     
     var Person = Brace.View.extend({
