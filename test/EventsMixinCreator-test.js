@@ -1,0 +1,74 @@
+
+module("Brace.EventsMixinCreator");
+
+test("On and trigger are added to model", function() {
+    var MaleModel = Brace.Model.extend({
+        namedEvents: ["think"]
+    });
+
+    var zoolander = new MaleModel();
+
+    ok(zoolander.onThink);
+    ok(zoolander.triggerThink);
+
+    var triggered = false;
+    var handler = function() {
+        triggered = true;
+    };
+    zoolander.onThink(handler);
+
+    zoolander.triggerThink();
+    ok(triggered);
+});
+
+test("namedEvents array is not removed from model instance", function() {
+    var MaleModel = Brace.Model.extend({
+        namedEvents: ["think"]
+    });
+
+    var hansel = new MaleModel();
+    deepEqual(hansel.namedEvents, ["think"]);
+});
+
+test("Binding when no events specified succeeds", function() {
+    var MaleModel = Brace.Model.extend();
+
+    var hansel = new MaleModel();
+    hansel.on("derelique");
+});
+
+test("Triggering when no events specified succeeds", function() {
+    var MaleModel = Brace.Model.extend();
+
+    var hansel = new MaleModel();
+    hansel.trigger("derelique");
+});
+
+test("Mixin can apply events to model with no events", function() {
+    var MyMixin = {
+        namedEvents: ["someEvent"]
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin]
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedEvents, ["someEvent"]);
+    ok(myModel.onSomeEvent);
+    ok(myModel.triggerSomeEvent);
+});
+
+test("Mixin can apply events to model with some events", function() {
+    var MyMixin = {
+        namedEvents: ["someEvent"]
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin],
+        namedEvents: ["someOtherEvent"]
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedEvents, ["someOtherEvent", "someEvent"]);
+    ok(myModel.onSomeOtherEvent);
+    ok(myModel.triggerSomeOtherEvent);
+    ok(myModel.onSomeEvent);
+    ok(myModel.triggerSomeEvent);
+});
