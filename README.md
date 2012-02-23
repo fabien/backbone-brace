@@ -6,8 +6,8 @@ Brace is an extension to [Backbone](http://backbonejs.org) that adds mixins and 
 
 Brace allows:
 
-- "namedEvents" to Models, Collections, Views and Routers
-- "namedAttributes" to Models
+- "namedEvents" on Models, Collections, Views and Routers
+- "namedAttributes" on Models
 
 Both namedEvents and namedAttributes are arrays of strings.
 
@@ -16,13 +16,13 @@ Both namedEvents and namedAttributes are arrays of strings.
         namedEvents: ["sleep"]
     });
 
-For each attribute in namedAttributes, get[Attribute] and set[Attribute] methods are generated
+For each attribute in namedAttributes, get[Attribute] and set[Attribute] methods are generated:
 
     var person = new Person();
     person.setName("Tim");
     person.getName() // Returns "Tim"
 
-Backbone models' get() and set() validate attributes
+Backbone models' get() and set() validate attributes:
 
     person.get("name"); "Time"
     person.set("name", "Timmy"); // ok
@@ -36,7 +36,7 @@ Backbone models' get() and set() validate attributes
         lost: "frequently"
     }); // throws exception
     
-For each event in namedEvents, on[Event] and trigger[Event] methods are generated
+For each event in namedEvents, on[Event] and trigger[Event] methods are generated:
     
     person.onSleep(function(dream) { console.log("Dreaming about " + dream); } );
     person.triggerSleep("Unicorns");
@@ -44,7 +44,7 @@ For each event in namedEvents, on[Event] and trigger[Event] methods are generate
 
 ## Mixins
 
-Brace allows a "mixins" property on models, views, collections and routers.
+Brace allows a "mixins" property on models, views, collections and routers:
 
     var Loggable = {
         log: function(msg) {
@@ -63,7 +63,7 @@ Brace allows a "mixins" property on models, views, collections and routers.
 
 ## Mixins with Backbone
 
-namedAttributes and namedEvents in mixins are respected.
+namedAttributes and namedEvents in mixins are respected:
 
     var Selectable = {
         namedAttributes: ["selected"],
@@ -91,5 +91,5 @@ namedAttributes and namedEvents in mixins are respected.
 
 Additionally, Brace composes the initialize() methods on all objects, and defaults and validate() on models.
 
-All other name clashes fail violently and forcefully *at class declaration time* (not at instance construction time).
+All other name clashes between mixins fail violently and forcefully *at class declaration time* (not at instance construction time).
 
