@@ -86,6 +86,16 @@ test("Getting attribute that does not exist fails", function() {
     });
 });
 
+test("Default set and get work", function() {
+    var MaleModel = Brace.Model.extend({
+        namedAttributes: ["look"]
+    });
+
+    var zoolander = new MaleModel();
+    zoolander.set("look", "Le Tigre");
+    equals(zoolander.get("look"), "Le Tigre");
+});
+
 test("Setting any attribute when no property exists succeeds", function() {
     var MaleModel = Brace.Model.extend();
 

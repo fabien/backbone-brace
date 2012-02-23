@@ -48,6 +48,24 @@ test("Mixin initialize is mixed in when class does not contain initialize method
     ok(testModelInstance.mixin1Initialized);
 });
 
+test("Base class initialize works when mixin does not contain initialize method", function() {
+    var TestMixin = {
+       run: function() {
+           this.wasRun = true;
+       }
+    };
+    var TestRouter = Brace.Router.extend({
+        mixins: [TestMixin],
+        initialize: function() {
+            this.run();
+        }
+    });
+
+    var instance = new TestRouter();
+
+    ok(instance.wasRun, "Error mixing in initialize method");
+});
+
 test("Class initialize is called when mixin initialize is specified", function() {
     var TestMixin = {
         initialize: function() {
@@ -220,6 +238,16 @@ test("Attributes Mixin passes options to underlying set", function () {
     triggered = false;
 
     myContactModel.setName("jared", {silent: true});
+
+    ok(!triggered, "Event not trigged with silent passed to set");
+
+    myContactModel.set("name", "jared", {silent: true});
+
+    ok(!triggered, "Event not trigged with silent passed to set");
+
+    myContactModel.set({
+       name: "jared"
+    }, {silent: true});
 
     ok(!triggered, "Event not trigged with silent passed to set");
 });

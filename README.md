@@ -6,8 +6,8 @@ Brace is an extension to [Backbone](http://backbonejs.org) that adds mixins and 
 
 Brace allows:
 
-- "namedEvents" on Models, Collections, Views and Routers
-- "namedAttributes" on Models
+- "namedEvents" on Models, Collections, Views and Routers, which is a collection of exposed events
+- "namedAttributes" on Models, which is a collection of exposed attributes (ie a schema)
 
 Both namedEvents and namedAttributes are arrays of strings.
 
@@ -24,7 +24,7 @@ For each attribute in namedAttributes, get[Attribute] and set[Attribute] methods
 
 Backbone models' get() and set() validate attributes:
 
-    person.get("name"); "Time"
+    person.get("name"); // ok
     person.set("name", "Timmy"); // ok
     person.set({
         name: "Timothy"
@@ -52,7 +52,7 @@ Brace allows a "mixins" property on models, views, collections and routers:
         }
     };
     
-    var Person = Brace.View.extend({
+    var PersonView = Brace.View.extend({
         mixins: [Loggable],
         
         initialize: function() {
@@ -84,7 +84,7 @@ namedAttributes and namedEvents in mixins are respected:
     
     var person = new Person();
 
-    person.onSelect(function() { console.log("selected"); });
+    person.onSelect(function() { console.log("Person was selected"); });
     person.setSelected(true);
     person.getSelected();
     person.triggerSelect();
@@ -93,3 +93,14 @@ Additionally, Brace composes the initialize() methods on all objects, and defaul
 
 All other name clashes between mixins fail violently and forcefully *at class declaration time* (not at instance construction time).
 
+    var Runnable = {
+        run: function() {}
+    };
+    
+    var RunModel = Brace.Model.extend({
+        mixins: [Runnable],
+        run: function() {}
+    }); // throws "Mixin error: class already has property 'run' defined"
+    
+    
+    

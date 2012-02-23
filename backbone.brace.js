@@ -60,7 +60,7 @@
                     var mixinDefaults = mixin[key];
                     for (var id in mixinDefaults) {
                         if (defaults.hasOwnProperty(id)) {
-                            throw "Mixin error: object " + ctor + " already has default " + id + " defined for mixin " + mixin;
+                            throw "Mixin error: class already has default '" + id + "' defined";
                         }
                         defaults[id] = mixinDefaults[id];
                     }
@@ -93,7 +93,7 @@
                 }
                 // Name collisions with other mixins or or the object we're mixing into result in violent and forceful disapproval.
                 if (proto.hasOwnProperty(key)) {
-                    throw "Mixin error: object " + ctor + " already has attribute " + key + " for mixin " + mixin;
+                    throw "Mixin error: class already has property '" + key + "' defined";
                 }
                 proto[key] = mixin[key];
             }, this);
@@ -113,6 +113,7 @@
             }
 
             _.each(attributes, function (attribute) {
+                // TODO: has, escape, unset
                 var setter = Brace.Mixins.createMethodName("set", attribute);
                 methods[setter] = function (val,options) {
                     var obj = {};
@@ -136,6 +137,7 @@
         create: function(events) {
             var eventMethods = {};
             var createEvent = function(eventName) {
+                // TODO: off
                 var binder = Brace.Mixins.createMethodName("on", eventName);
                 eventMethods[binder] = function() {
                     return this.on.apply(this, [eventName].concat(_.toArray(arguments)));
@@ -192,7 +194,7 @@
         var childProto = childCtor.prototype;
 
         var oldSet = proto.set;
-        childProto.set = function(key,options) {
+        childProto.set = function(key, value, options) {
             // TODO: has, escape, unset
             var attrs,
                 attributes = this.namedAttributes;
