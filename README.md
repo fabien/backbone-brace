@@ -11,6 +11,7 @@ Brace allows:
 
 Both namedEvents and namedAttributes are arrays of strings.
 
+    :::javascript
     var Person = Brace.Model.extend({
         namedAttributes: ["name"],
         namedEvents: ["sleep"]
@@ -18,12 +19,14 @@ Both namedEvents and namedAttributes are arrays of strings.
 
 For each attribute in namedAttributes, get[Attribute] and set[Attribute] methods are generated:
 
+    :::javascript
     var person = new Person();
     person.setName("Tim");
     person.getName() // Returns "Tim"
 
 Backbone models' get() and set() validate attributes:
 
+    :::javascript
     person.get("name"); // ok
     person.set("name", "Timmy"); // ok
     person.set({
@@ -38,6 +41,7 @@ Backbone models' get() and set() validate attributes:
     
 For each event in namedEvents, on[Event] and trigger[Event] methods are generated:
     
+    :::javascript
     person.onSleep(function(dream) { console.log("Dreaming about " + dream); } );
     person.triggerSleep("Unicorns");
 
@@ -46,6 +50,7 @@ For each event in namedEvents, on[Event] and trigger[Event] methods are generate
 
 Brace allows a "mixins" property on models, views, collections and routers:
 
+    :::javascript
     var Loggable = {
         log: function(msg) {
             console.log(msg);
@@ -65,6 +70,7 @@ Brace allows a "mixins" property on models, views, collections and routers:
 
 namedAttributes and namedEvents in mixins are respected:
 
+    :::javascript
     var Selectable = {
         namedAttributes: ["selected"],
         namedEvents: ["select"],
@@ -96,6 +102,7 @@ Additionally, Brace composes
 
 All other name clashes between mixins fail violently and forcefully *at class declaration time* (not at instance construction time).
 
+    :::javascript
     var Runnable = {
         run: function() {}
     };
