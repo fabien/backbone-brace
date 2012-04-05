@@ -1,16 +1,19 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
-  function strDate(){
-    var now = new Date();
-    return now.getFullYear() + '/' + now.getMonth() + "/" + now.getDate();
+  function now(){
+    var today = new Date();
+    return {
+      today: today.getFullYear() + '/' + today.getMonth() + "/" + today.getDate(),
+      year: today.getFullYear()
+    };
   }
 
   // Project configuration.
   grunt.initConfig({
     meta: {
-      banner: '//     Backbone Brace - ' + strDate() + '\n' +
-        '//     Copyright 2012 Atlassian Software Systems Pty Ltd\n' +
+      banner: '//     Backbone Brace - ' + now().today + '\n' +
+        '//     Copyright ' + now().year + ' Atlassian Software Systems Pty Ltd\n' +
         '//     Licensed under the Apache License, Version 2.0'
     },
     lint: {
