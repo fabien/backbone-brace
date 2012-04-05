@@ -1,3 +1,9 @@
+//     Backbone Brace - 2012/3/5
+//     Copyright 2012 Atlassian Software Systems Pty Ltd
+//     Licensed under the Apache License, Version 2.0
+
+// For usage instructions checkout the [README](../README.md). This is
+// the annotated source.
 (function () {
 
     // node / browser imports, copied from here
