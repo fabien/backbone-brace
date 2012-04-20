@@ -77,7 +77,7 @@ test("Class initialize is called when mixin initialize is specified", function()
         initialize: function() {
             this.myMixin2Has = "beenCalled";
         }
-    }
+    };
 
     var TestModel = Brace.Model.extend({
         mixins: [TestMixin, TestMixin2],
@@ -154,7 +154,7 @@ test("Validate is composed in multiple mixins", function() {
         validate: function() {
             this.mixin2Validated = true;
         }
-    }
+    };
     var TestModel = Brace.Model.extend({
         mixins: [TestMixin1, TestMixin2],
         validate: function() {
@@ -200,18 +200,18 @@ test("Attributes Mixin", function () {
 
     var myContactModel = new ContactModel({
         name: "scott",
-        number: 0412947430
+        number: 412947430
     });
 
     equals("scott", myContactModel.getName());
-    equals(0412947430, myContactModel.getNumber());
+    equals(412947430, myContactModel.getNumber());
 
     myContactModel.setName("jonothan");
-    myContactModel.setNumber(000);
+    myContactModel.setNumber(0);
 
 
     equals("jonothan", myContactModel.getName());
-    equals(000, myContactModel.getNumber());
+    equals(0, myContactModel.getNumber());
 });
 
 
@@ -223,7 +223,7 @@ test("Attributes Mixin passes options to underlying set", function () {
 
     var myContactModel = new ContactModel({
         name: "scott",
-        number: 0412947430
+        number: 412947430
     });
 
     var triggered;
@@ -232,7 +232,7 @@ test("Attributes Mixin passes options to underlying set", function () {
     });
 
     myContactModel.setName("jonothan");
-    myContactModel.setNumber(000);
+    myContactModel.setNumber(0);
 
     ok(triggered, "Event trigged after set");
     triggered = false;
