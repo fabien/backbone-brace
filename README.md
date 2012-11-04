@@ -9,7 +9,7 @@ Brace allows:
 - "namedEvents" on Models, Collections, Views and Routers, which is a collection of exposed events
 - "namedAttributes" on Models, which is a collection of exposed attributes - ie a model schema
 
-Both namedEvents and namedAttributes are arrays of strings.
+Both namedEvents and namedAttributes are arrays of strings. namedAttributes can also be an object.
 
     :::javascript
     var Person = Brace.Model.extend({
@@ -38,7 +38,48 @@ Backbone models' get() and set() validate attributes:
     person.set({
         lost: "frequently"
     }); // throws exception
+
+The types of your namedAttributes are validated and coerced when namedAttributes is an object:
     
+    :::javascript
+    var People = Brace.Collection.extend();
+    var Person = Brace.Model.extend({
+        namedAttributes: {
+            name : "string", // validate primitives with typeof
+            otherNames : [ "string" ], // validate typed array-likes
+            birthDate : Date, // validate arbitrary ctors with instanceof,
+                              // calls `new ctor(rawValue)` if necessary
+            children : People, // validate Backbone.Collections,
+                               // coerces arrays and contained models if necessary
+            attributes : Array, // validate untyped array-likes
+            metadata : null || undefined || false // skip validation completely
+        }
+    });
+    People.model = Person;
+
+    :::javascript
+    var person = new Person({ name : 'Enigma' }); // ok
+    person.set('name', null); // ok
+    person.set('name', 'Nazim'); // ok
+    person.set('name', 4); // throws exception
+
+    :::javascript
+    person.set('otherNames', [ 'Ahmed' ]); // ok
+    person.set('otherNames', [ 1, 4 ]); // throws exception
+
+    :::javascript
+    person.set('attributes', [ 'one', 2, {} ]); // ok
+    person.set('attributes', 'The Dude'); // throws exception
+
+    ::javascript
+    person.set('birthDate', 'Mar 12 1960'); // ok
+    person.get('birthDate').toString(); // "Sat Mar 12 1960 00:00:00 GMT+1100 (AUS Eastern Daylight Time)"
+
+    :::javascript
+    person.set('children', [ { name : 'Adam' }, { name : 'Mariam' }, { name : 'Sarah' } ]); // ok
+    person.get('children'); // returns People instance containing three Person models.
+
+
 For each event in namedEvents, on[Event] and trigger[Event] methods are generated:
     
     :::javascript

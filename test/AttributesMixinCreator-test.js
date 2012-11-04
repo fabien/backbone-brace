@@ -24,7 +24,7 @@ test("ID attribute is always added to namedAttributes", function() {
 
     var zoolander = new MaleModel();
 
-    deepEqual(zoolander.namedAttributes, ["id", "look"]);
+    deepEqual(zoolander.namedAttributes, { "id" : null, "look" : null });
     ok(zoolander.getId);
     ok(zoolander.setId);
 });
@@ -36,7 +36,7 @@ test("Does not barf when user specifies id", function() {
 
     var zoolander = new MaleModel();
 
-    deepEqual(zoolander.namedAttributes, ["id", "look"]);
+    deepEqual(zoolander.namedAttributes, { "id" : null, "look" : null });
     ok(zoolander.getId);
     ok(zoolander.setId);
 });
@@ -118,7 +118,7 @@ test("Mixin can apply namedAttributes to model with no namedAttributes", functio
         mixins: [MyMixin]
     });
     var myModel = new MyModel();
-    deepEqual(myModel.namedAttributes, ["id", "someAttribute"]);
+    deepEqual(myModel.namedAttributes, { "id" : null, "someAttribute" : null });
     ok(myModel.getSomeAttribute);
     ok(myModel.setSomeAttribute);
 });
@@ -132,9 +132,137 @@ test("Mixin can apply namedAttributes to model with some namedAttributes", funct
         namedAttributes: ["someOtherAttribute"]
     });
     var myModel = new MyModel();
-    deepEqual(myModel.namedAttributes, ["id", "someOtherAttribute", "someAttribute"]);
+    deepEqual(myModel.namedAttributes, { "id" : null, "someAttribute" : null, "someOtherAttribute" : null });
     ok(myModel.getSomeOtherAttribute);
     ok(myModel.setSomeOtherAttribute);
     ok(myModel.getSomeAttribute);
     ok(myModel.setSomeAttribute);
 });
+
+test("Mixin can apply typed namedAttributes to model with some namedAttributes", function() {
+    var MyMixin = {
+        namedAttributes: { 
+            "someAttribute" : String
+        }
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin],
+        namedAttributes: ["someOtherAttribute"]
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedAttributes, { "id" : null, "someAttribute" : String, "someOtherAttribute" : null });
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+
+test("Mixin can apply namedAttributes to model with some typed namedAttributes", function() {
+    var MyMixin = {
+        namedAttributes: ["someAttribute"]
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin],
+        namedAttributes: {
+            "someOtherAttribute" : String
+        }
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedAttributes, { "id" : null, "someAttribute" : null, "someOtherAttribute" : String });
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+
+test("Mixin can apply typed namedAttributes to model with some typed namedAttributes", function() {
+    var MyMixin = {
+        namedAttributes: { 
+            "someAttribute" : String
+        }
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin],
+        namedAttributes: {
+            "someOtherAttribute" : String
+        }
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedAttributes, { "id" : null, "someAttribute" : String, "someOtherAttribute" : String });
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+
+test("Mixin with nonconflicting attributes types will pass", function() {
+    var mixinAttr5 = Brace.Collection.extend();
+    var modelAttr5 = mixinAttr5.extend();
+    var modelAttr6 = Brace.Collection.extend();
+    var mixinAttr6 = modelAttr6.extend();
+    var MixinAttr7 = function() {};
+    var ModelAttr7 = function() {};
+    ModelAttr7.prototype = new MixinAttr7();
+    var MyMixin = {
+        namedAttributes: { 
+            "someAttribute" : String,
+            "attr2" : [ 'string' ],
+            "attr3" : Array,
+            "attr4" : [],
+            "attr5" : mixinAttr5,
+            "attr6" : mixinAttr6,
+            "attr7" : MixinAttr7
+        }
+    };
+    var MyModel = Brace.Model.extend({
+        mixins: [MyMixin],
+        namedAttributes: {
+            "someAttribute" : String,
+            "attr2" : [],
+            "attr3" : ['string'],
+            "attr4" : [],
+            "attr5" : modelAttr5,
+            "attr6" : modelAttr6,
+            "attr7" : ModelAttr7
+        }
+    });
+    var myModel = new MyModel();
+    deepEqual(myModel.namedAttributes, {
+        "id" : null,
+        "someAttribute" : String,
+        "attr2" : [ 'string' ],
+        "attr3" : [ 'string' ],
+        "attr4" : [],
+        "attr5" : modelAttr5,
+        "attr6" : mixinAttr6,
+        "attr7" : ModelAttr7
+    });
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+
+(function() {
+    function conflictedTypesTest(mixinType, modelType) {
+        var MyMixin = {
+            namedAttributes: { 
+                "someAttribute" : mixinType
+            }
+        };
+        raises(function() {
+            Brace.Model.extend({
+                mixins: [MyMixin],
+                namedAttributes: {
+                    "someAttribute" : modelType
+                }
+            });
+        });
+    }
+
+    test("Mixin with conflicting namedAttributes types will throw", function() {
+        conflictedTypesTest(Date, String);
+        conflictedTypesTest('number', Number);
+        conflictedTypesTest(Backbone.Collection.extend(), Backbone.Collection.extend());
+        conflictedTypesTest(Array, Backbone.Collection.extend());
+        conflictedTypesTest(['string'], ['number']);
+    });
+}());
