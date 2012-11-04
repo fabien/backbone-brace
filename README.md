@@ -57,25 +57,20 @@ The types of your namedAttributes are validated and coerced when namedAttributes
     });
     People.model = Person;
 
-    :::javascript
     var person = new Person({ name : 'Enigma' }); // ok
     person.set('name', null); // ok
     person.set('name', 'Nazim'); // ok
     person.set('name', 4); // throws exception
 
-    :::javascript
     person.set('otherNames', [ 'Ahmed' ]); // ok
     person.set('otherNames', [ 1, 4 ]); // throws exception
 
-    :::javascript
     person.set('attributes', [ 'one', 2, {} ]); // ok
     person.set('attributes', 'The Dude'); // throws exception
 
-    ::javascript
     person.set('birthDate', 'Mar 12 1960'); // ok
     person.get('birthDate').toString(); // "Sat Mar 12 1960 00:00:00 GMT+1100 (AUS Eastern Daylight Time)"
 
-    :::javascript
     person.set('children', [ { name : 'Adam' }, { name : 'Mariam' }, { name : 'Sarah' } ]); // ok
     person.get('children'); // returns People instance containing three Person models.
 
