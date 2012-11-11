@@ -138,3 +138,26 @@ test("Mixin can apply namedAttributes to model with some namedAttributes", funct
     ok(myModel.getSomeAttribute);
     ok(myModel.setSomeAttribute);
 });
+
+test("Children inherit their parents namedAttributes", function() {
+    var MyParentModel = Brace.Model.extend({
+        namedAttributes: ["someAttribute"]
+    });
+    var MyModel = MyParentModel.extend({
+        namedAttributes: ["someOtherAttribute"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedAttributes.slice();
+    var expected = ["id", "someOtherAttribute", "someAttribute"];
+
+    // order doesn't matter
+    actual.sort();
+    expected.sort();
+
+    deepEqual(actual, expected);
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});

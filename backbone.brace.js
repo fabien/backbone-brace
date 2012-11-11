@@ -74,7 +74,7 @@
                     if (!proto.namedAttributes) {
                         proto.namedAttributes = [];
                     }
-                    proto.namedAttributes = proto.namedAttributes.concat(mixin[key]);
+                    proto.namedAttributes = _.uniq(proto.namedAttributes.concat(mixin[key]));
                     return;
                 }
 
@@ -87,7 +87,7 @@
                     if (!proto.namedEvents) {
                         proto.namedEvents = [];
                     }
-                    proto.namedEvents = proto.namedEvents.concat(mixin[key]);
+                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
                     return;
                 }
                 // Name collisions with other mixins or or the object we're mixing into result in violent and forceful disapproval.
@@ -168,6 +168,14 @@
                 delete cleanProtoProps.mixins;
             }
             child = oldExtend.call(this, cleanProtoProps, classProps);
+
+            if (this.prototype.namedEvents) {
+                Brace.Mixins.applyMixin(child, { namedEvents : this.prototype.namedEvents });
+            }
+            if (this.prototype.namedAttributes) {
+                Brace.Mixins.applyMixin(child, { namedAttributes : this.prototype.namedAttributes });
+            }
+
             if (mixins) {
                 _.each(protoProps.mixins, function(mixin) {
                     Brace.Mixins.applyMixin(child, mixin);
