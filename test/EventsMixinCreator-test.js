@@ -72,3 +72,26 @@ test("Mixin can apply events to model with some events", function() {
     ok(myModel.onSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
+
+test("Children inherit their parents namedEvents", function() {
+    var MyParentModel = Brace.Model.extend({
+        namedEvents: ["someEvent"]
+    });
+    var MyModel = MyParentModel.extend({
+        namedEvents: ["someOtherEvent"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedEvents.slice();
+    var expected = ["someOtherEvent", "someEvent"];
+
+    // order doesn't matter
+    actual.sort();
+    expected.sort();
+
+    deepEqual(actual, expected);
+    ok(myModel.onSomeOtherEvent);
+    ok(myModel.triggerSomeOtherEvent);
+    ok(myModel.onSomeEvent);
+    ok(myModel.triggerSomeEvent);
+});
