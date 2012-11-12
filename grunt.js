@@ -1,6 +1,8 @@
 /*global module:false*/
-module.exports = function(grunt) {
 
+var path = require('path');
+
+module.exports = function(grunt) {
   function now(){
     var today = new Date();
     return {
@@ -63,7 +65,7 @@ module.exports = function(grunt) {
     var done = this.async();
     var opts = {
       cmd: 'docco',
-      args: ['dist/backbone.brace.js']
+      args: [path.join('dist', 'backbone.brace.js')]
     };
     setTimeout(function(){
       grunt.utils.spawn(opts, function(err, rslt, code){

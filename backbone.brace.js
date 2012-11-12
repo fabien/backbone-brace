@@ -15,6 +15,164 @@
     var Backbone = root.Backbone;
     if (!Backbone && (typeof require !== 'undefined')) { Backbone = require('backbone'); }
 
+    // ## Helper functions
+
+    // Given an array, this function will return an object where each
+    //     property name is an element of the original array. The value
+    //     of each property will be null.
+    // Given anything else, this function will return the object untouched.
+    /**
+     * This function is used to ensure a consistent shape for the namedAttributes property.
+     * namedAttributes accepts two formats:
+     * - An array like ['attr1', 'attr2'] if you don't care about the Type of any attribute.
+     * - An object like { attr1 : Type1, attr2 : Type2 } to specify an expected Type.
+     *
+     * @param maybeArray {*} thing to transform into an object
+     */
+    function asObject(maybeArray) {
+        if (_.isArray(maybeArray)) {
+            return _.reduce(maybeArray, function(obj, prop) {
+                obj[prop] =  null;
+                return obj;
+            }, {});
+        }
+        return maybeArray;
+    }
+
+    // Return a value of the specified type, generated from the value parameter.
+    // If type conversion is necessary, this function will generate a new object using
+    // `new Type(value)`
+    //
+    // `value` Any value. null and undefined values will be untouched.
+    //
+    // `Type` When given:
+    //
+    // * a falsy value: this function will do no type conversion.
+    // * a string: this function will throw if `typeof value !== Type`, and return value otherwise.
+    // * an Array: this function will be recursively called for each element in value using
+    //   Type's first element as the type. E.g.,
+    //         `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`
+    //   It will return a new array consisting of the result of each recursive call.
+    // * a Backbone.Collection constructor: this function may be recursively called for each element in 
+    //     value using Type.model as the type. E.g., 
+    //         `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
+    //         recursively call `ensureType(Number, 1)`
+    //     It will return a Backbone.Collection via new Type({array of recursive results})
+    // * a function: This will check value instanceof Type, and if false, will return `new Type(value)`
+    //     Otherwise it will return value directly
+    /**
+     * @param value {*}
+     * @param Type {Array|function(new:*, *)|string|false|null|undefined}
+     */
+    function ensureType(Type, value) {
+        if (!Type || value == null) {
+            return value;
+        }
+
+        if (typeof Type === 'string' || Type instanceof String) {
+            if (typeof value !== ""+Type) {
+                throw "The typeof " + value + " is " + typeof value + " but expected it to be " + Type;
+            }
+            return value;
+        }
+
+        if (_.isArray(Type) || Type === Array) {
+            if (!isArrayLike(value)) {
+                throw "Array type expected, but nonnull, non-Array value provided.";
+            }
+            return Type === Array || !Type[0] ?
+                value :
+                _.map(value, _.bind(ensureType, null, Type[0]));
+        }
+
+        if (typeof Type !== 'function') {
+            throw "Invalid expected type " + Type +
+            '. Should be falsy, String, Array, Backbone.Collection constructor, or function.';
+        }
+
+        if (value instanceof Type) {
+            return value;
+        }
+
+        if (isCollectionConstructor(Type)) {
+            return new Type(ensureType([ Type.model ], value));
+        }
+
+        return new Type(value);
+    }
+
+    // Returns true if obj is extend()'ed from Backbone.Collection (or from another collection)
+    /**
+     * @param obj {*} object to check
+     * @param rootConstructor {?function(new:Backbone.Collection)} optional constructor that inherits from
+     *        Backbone.Collection. Will check that obj is extend()'ed from this instead of Backbone.Collection.
+     */
+    function isCollectionConstructor(obj, rootConstructor) {
+        return  obj && (
+            // obj *distantly* extends Backbone.Collection (most likely case)
+            obj.__super__ instanceof (rootConstructor || Backbone.Collection) ||
+
+            // obj *directly* extends Backbone.Collection (e.g., Brace.Collection)
+            // !(fn.prototype instanceof fn), so the above check doesn't catch this case.
+            obj.__super__ === (rootConstructor || Backbone.Collection).prototype ||
+
+            // obj *is* Backbone.Collection
+            obj === (rootConstructor || Backbone.Collection)
+        );
+    }
+
+    // array-like is currently defined by "has a length property, and is not a string or
+    // function or Backbone.Collection."
+    // Backbone.Collections are excluded because you can't do collection[0] to access models.
+    function isArrayLike(value) {
+        return _.has(value,'length') && !(
+            value instanceof String ||
+            _.has({'string':1, 'function':1}, typeof value) ||
+            value instanceof Backbone.Collection
+        );
+    }
+
+    // With namedAttributes, we want to allow both the mixin, and the extender to define types.
+    // We want to take the stricter of the two types where possible.
+    // Where the types conflict, throw an error.
+    function nonConflictedTypes(obj, refObj) {
+        var newObj = {};
+        _.each(obj, function(val, key) {
+            if (!refObj[key] || assumes(val, refObj[key])) {
+                newObj[key] = val;
+            } else if (!val || assumes(refObj[key], val)) {
+                return;
+            } else {
+                throw key + " has conflicted type descriptors.";
+            }
+        });
+        return newObj;
+    }
+
+    // One type *assumes* another when the conditions for meeting its
+    // type-check are a super set of the assumed type's conditions.
+    // E.g., `[ 'string' ]` assumes `Array` because you can't have an array of strings without an array.
+    function assumes(assumer, assumed) {
+        if (!assumed || assumed === assumer) {
+            return true;
+        }
+        // if it's a string, only the previous strict equality check would have sufficed.
+        if (!assumer || typeof assumer === 'string') {
+            return false;
+        }
+        if (assumer instanceof Array) {
+            return assumed === Array ||
+                (assumed instanceof Array && assumes(assumer[0], assumed[0]));
+        }
+        if (typeof assumed !== 'function') {
+            return false;
+        }
+        if (isCollectionConstructor(assumed)) {
+            return isCollectionConstructor(assumer, assumed);
+        }
+        return assumer.prototype instanceof assumed;
+    }
+
     // ## Brace.Mixins ##
     // Mixin utilities
     Brace.Mixins = {
@@ -67,14 +225,9 @@
                 }
                 // `namedAttributes` are added to the mixin, and we mixin in getters and setters for each attribute.
                 if ("namedAttributes" === key) {
-                    // `namedAttributes` must be an array
-                    if (!_.isArray(mixin[key])) {
-                        throw "Expects namedAttributes member on mixin to be an array";
-                    }
-                    if (!proto.namedAttributes) {
-                        proto.namedAttributes = [];
-                    }
-                    proto.namedAttributes = _.uniq(proto.namedAttributes.concat(mixin[key]));
+                    var protoAttrs = asObject(proto.namedAttributes) || {};
+                    var mixinAttrs = asObject(mixin[key]);
+                    proto.namedAttributes = _.extend(protoAttrs, nonConflictedTypes(mixinAttrs, protoAttrs));
                     return;
                 }
 
@@ -87,7 +240,7 @@
                     if (!proto.namedEvents) {
                         proto.namedEvents = [];
                     }
-                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
+                    proto.namedEvents = proto.namedEvents.concat(mixin[key]);
                     return;
                 }
                 // Name collisions with other mixins or or the object we're mixing into result in violent and forceful disapproval.
@@ -107,26 +260,39 @@
         create: function(attributes) {
             var methods = {};
 
-            if (_.indexOf(attributes, "id") === -1) {
-                attributes.unshift("id");
+            if (!attributes) {
+                attributes = {};
             }
 
-            _.each(attributes, function (attribute) {
+            if (!_.has(attributes, "id")) {
+                attributes.id = null;
+            }
+
+            _.each(attributes, function (expectedType, attrName) {
                 // TODO: has, escape, unset
-                var setter = Brace.Mixins.createMethodName("set", attribute);
+                var setter = Brace.Mixins.createMethodName("set", attrName);
                 methods[setter] = function (val,options) {
-                    var obj = {};
-                    obj[attribute] = val;
-                    this.set(obj,options);
-                    return this;
+                    return this.set(attrName, val, options);
                 };
-                var getter = Brace.Mixins.createMethodName("get", attribute);
+                var getter = Brace.Mixins.createMethodName("get", attrName);
                 methods[getter] = function () {
-                    return this.get(attribute);
+                    return this.get(attrName);
                 };
             });
+
             return methods;
-        }
+        },
+        /**
+         * See JSDoc for this function in the backbone.brace file.
+         *
+         * Expose the ensureType function for people with custom constructors that don't call
+         * .set() to initialize attributes. Hopefully this is rarely used, as I would
+         * consider not calling .set() to be a code smell.
+         *
+         * @param type
+         * @param value
+         */
+        ensureType : ensureType
     };
 
     // ## Brace.EventsMixinCreator ##
@@ -185,6 +351,7 @@
                 Brace.Mixins.applyMixin(child, Brace.EventsMixinCreator.create(child.prototype.namedEvents));
             }
             if (child.prototype.namedAttributes) {
+                child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
                 Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
             }
             child.extend = newExtend;
@@ -202,25 +369,35 @@
             // TODO: has, escape, unset
             var attrs,
                 attributes = this.namedAttributes;
-            if (attributes) {
-                if (_.isObject(key) || key == null) {
-                    attrs = key;
-                } else {
-                    attrs = {};
-                    attrs[key] = value;
-                }
-                for (var attr in attrs) {
-                    if (_.indexOf(attributes, attr) < 0) {
-                        throw "Attribute '" + attr + "' does not exist";
-                    }
-                }
+            
+            if (!attributes || key == null) {
+                return oldSet.apply(this, arguments);    
             }
-            return oldSet.apply(this, arguments);
+
+            if (_.isObject(key)) {
+                attrs = _.clone(key);
+                options = value;
+            } else {
+                attrs = {};
+                attrs[key] = value;
+            }
+
+            for (var attr in attrs) {
+                if (!_.has(attrs, attr)) {
+                    continue;
+                }
+                if (!_.has(attributes, attr)) {
+                    throw "Attribute '" + attr + "' does not exist";
+                }
+                attrs[attr] = ensureType(attributes[attr], attrs[attr]);
+            }
+
+            return oldSet.call(this, attrs, options);    
         };
 
         var oldGet = proto.get;
         childProto.get = function(attr) {
-            if (this.namedAttributes && _.indexOf(this.namedAttributes, attr) < 0) {
+            if (this.namedAttributes && !_.has(this.namedAttributes, attr)) {
                 throw "Attribute '" + attr + "' does not exist";
             }
             return oldGet.apply(this, arguments);
