@@ -95,3 +95,56 @@ test("Children inherit their parents namedEvents", function() {
     ok(myModel.onSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
+
+test("Children inherit their ancestors namedEvents", function() {
+    var MyParentParentModel = Brace.Model.extend({
+        namedEvents: ["someEvent"]
+    });
+    var MyParentModel = MyParentParentModel.extend();
+    var MyModel = MyParentModel.extend({
+        namedEvents: ["someOtherEvent"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedEvents.slice();
+    var expected = ["someOtherEvent", "someEvent"];
+
+    // order doesn't matter
+    actual.sort();
+    expected.sort();
+
+    deepEqual(actual, expected);
+    ok(myModel.onSomeOtherEvent);
+    ok(myModel.triggerSomeOtherEvent);
+    ok(myModel.onSomeEvent);
+    ok(myModel.triggerSomeEvent);
+});
+
+test("Children inherit their parents and ancestors namedEvents", function() {
+    var MyParentParentModel = Brace.Model.extend({
+        namedEvents: ["someEvent"]
+    });
+    var MyParentModel = MyParentParentModel.extend({
+        namedEvents: ["someKindOfEvent"]
+    });
+    var MyModel = MyParentModel.extend({
+        namedEvents: ["someOtherEvent"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedEvents.slice();
+    var expected = ["someOtherEvent", "someKindOfEvent", "someEvent"];
+
+    // order doesn't matter
+    actual.sort();
+    expected.sort();
+
+    deepEqual(actual, expected);
+    ok(myModel.onSomeOtherEvent);
+    ok(myModel.triggerSomeOtherEvent);
+    ok(myModel.onSomeKindOfEvent);
+    ok(myModel.triggerSomeKindOfEvent);
+    ok(myModel.onSomeEvent);
+    ok(myModel.triggerSomeEvent);
+});
+

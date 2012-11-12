@@ -285,3 +285,48 @@ test("Children inherit their parents namedAttributes", function() {
     ok(myModel.getSomeAttribute);
     ok(myModel.setSomeAttribute);
 });
+
+test("Children inherit their ancestors namedAttributes", function() {
+    var MyParentParentModel = Brace.Model.extend({
+        namedAttributes: ["someAttribute"]
+    });
+    var MyParentModel = MyParentParentModel.extend();
+    var MyModel = MyParentModel.extend({
+        namedAttributes: ["someOtherAttribute"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedAttributes;
+    var expected = { "id": null, "someOtherAttribute": null, "someAttribute": null};
+
+    deepEqual(actual, expected);
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+
+test("Children inherit their parents and ancestors namedAttributes", function() {
+    var MyParentParentModel = Brace.Model.extend({
+        namedAttributes: ["someAttribute"]
+    });
+    var MyParentModel = MyParentParentModel.extend({
+        namedAttributes: ["someKindOfAttribute"]
+    });
+    var MyModel = MyParentModel.extend({
+        namedAttributes: ["someOtherAttribute"]
+    });
+    var myModel = new MyModel();
+
+    var actual = myModel.namedAttributes;
+    var expected = { "id": null, "someKindOfAttribute": null, "someOtherAttribute": null, "someAttribute": null};
+
+    deepEqual(actual, expected);
+    ok(myModel.getSomeOtherAttribute);
+    ok(myModel.setSomeOtherAttribute);
+    ok(myModel.getSomeKindOfAttribute);
+    ok(myModel.setSomeKindOfAttribute);
+    ok(myModel.getSomeAttribute);
+    ok(myModel.setSomeAttribute);
+});
+

@@ -240,7 +240,7 @@
                     if (!proto.namedEvents) {
                         proto.namedEvents = [];
                     }
-                    proto.namedEvents = proto.namedEvents.concat(mixin[key]);
+                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
                     return;
                 }
                 // Name collisions with other mixins or or the object we're mixing into result in violent and forceful disapproval.
