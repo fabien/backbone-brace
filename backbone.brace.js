@@ -65,6 +65,7 @@
      * @param type {Array|function(new:*, *)|string|false|null|undefined}
      */
     function ensureType(type, value) {
+        /*jshint newcap: false */
         if (!type || value == null) {
             return value;
         }

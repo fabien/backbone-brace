@@ -59,6 +59,7 @@ Otherwise it will return value directly</li>
 <span class="cm">     * @param type {Array|function(new:*, *)|string|false|null|undefined}</span>
 <span class="cm">     */</span>
     <span class="kd">function</span> <span class="nx">ensureType</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/*jshint newcap: false */</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">||</span> <span class="nx">value</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
         <span class="p">}</span>
