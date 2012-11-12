@@ -24,8 +24,8 @@
     /**
      * This function is used to ensure a consistent shape for the namedAttributes property.
      * namedAttributes accepts two formats:
-     * - An array like ['attr1', 'attr2'] if you don't care about the Type of any attribute.
-     * - An object like { attr1 : Type1, attr2 : Type2 } to specify an expected Type.
+     * - An array like ['attr1', 'attr2'] if you don't care about the type of any attribute.
+     * - An object like { attr1 : type1, attr2 : type2 } to specify an expected type.
      *
      * @param maybeArray {*} thing to transform into an object
      */
@@ -41,64 +41,64 @@
 
     // Return a value of the specified type, generated from the value parameter.
     // If type conversion is necessary, this function will generate a new object using
-    // `new Type(value)`
+    // `new type(value)`
     //
     // `value` Any value. null and undefined values will be untouched.
     //
-    // `Type` When given:
+    // `type` When given:
     //
     // * a falsy value: this function will do no type conversion.
-    // * a string: this function will throw if `typeof value !== Type`, and return value otherwise.
+    // * a string: this function will throw if `typeof value !== type`, and return value otherwise.
     // * an Array: this function will be recursively called for each element in value using
-    //   Type's first element as the type. E.g.,
+    //   type's first element as the type. E.g.,
     //         `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`
     //   It will return a new array consisting of the result of each recursive call.
     // * a Backbone.Collection constructor: this function may be recursively called for each element in 
-    //     value using Type.model as the type. E.g., 
+    //     value using type.model as the type. E.g.,
     //         `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
     //         recursively call `ensureType(Number, 1)`
-    //     It will return a Backbone.Collection via new Type({array of recursive results})
-    // * a function: This will check value instanceof Type, and if false, will return `new Type(value)`
+    //     It will return a Backbone.Collection via new type({array of recursive results})
+    // * a function: This will check value instanceof type, and if false, will return `new type(value)`
     //     Otherwise it will return value directly
     /**
      * @param value {*}
-     * @param Type {Array|function(new:*, *)|string|false|null|undefined}
+     * @param type {Array|function(new:*, *)|string|false|null|undefined}
      */
-    function ensureType(Type, value) {
-        if (!Type || value == null) {
+    function ensureType(type, value) {
+        if (!type || value == null) {
             return value;
         }
 
-        if (typeof Type === 'string' || Type instanceof String) {
-            if (typeof value !== ""+Type) {
-                throw "The typeof " + value + " is " + typeof value + " but expected it to be " + Type;
+        if (typeof type === 'string' || type instanceof String) {
+            if (typeof value !== ""+type) {
+                throw "The typeof " + value + " is " + typeof value + " but expected it to be " + type;
             }
             return value;
         }
 
-        if (_.isArray(Type) || Type === Array) {
+        if (_.isArray(type) || type === Array) {
             if (!isArrayLike(value)) {
                 throw "Array type expected, but nonnull, non-Array value provided.";
             }
-            return Type === Array || !Type[0] ?
+            return type === Array || !type[0] ?
                 value :
-                _.map(value, _.bind(ensureType, null, Type[0]));
+                _.map(value, _.bind(ensureType, null, type[0]));
         }
 
-        if (typeof Type !== 'function') {
-            throw "Invalid expected type " + Type +
+        if (typeof type !== 'function') {
+            throw "Invalid expected type " + type +
             '. Should be falsy, String, Array, Backbone.Collection constructor, or function.';
         }
 
-        if (value instanceof Type) {
+        if (value instanceof type) {
             return value;
         }
 
-        if (isCollectionConstructor(Type)) {
-            return new Type(ensureType([ Type.model ], value));
+        if (isCollectionConstructor(type)) {
+            return new type(ensureType([ type.model ], value));
         }
 
-        return new Type(value);
+        return new type(value);
     }
 
     // Returns true if obj is extend()'ed from Backbone.Collection (or from another collection)
