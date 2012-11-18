@@ -252,4 +252,75 @@ test("Attributes Mixin passes options to underlying set", function () {
     ok(!triggered, "Event not trigged with silent passed to set");
 });
 
+test("Order of composed initialize method", function() {
+    var addToTestArray = function(val) {
+        this.callOrder = this.callOrder || [];
+        this.callOrder.push(val);
+    };
+    var mixin1 = {
+        initialize: function() {
+            addToTestArray.call(this, 1);
+        }
+    };
+    var mixin2 = {
+        initialize: function() {
+            addToTestArray.call(this, 2);
+        }
+    };
 
+    // Test mixins with base class initialize
+    var ModelA = Brace.Model.extend({
+        mixins: [mixin1, mixin2],
+        initialize: function() {
+            addToTestArray.call(this, 0);
+        }
+    });
+    deepEqual(new ModelA().callOrder, [0, 1, 2], 'Initialize order when base class defines initialize');
+
+    // Test mixins without base class initialize
+    var ModelB = Brace.Model.extend({
+        mixins: [mixin2, mixin1]
+    });
+    deepEqual(new ModelB().callOrder, [2, 1], 'Initialize order when base class does not define initialize');
+});
+
+test("Order of composed validate method", function() {
+    var addToTestArray = function(val) {
+        this.callOrder = this.callOrder || [];
+        this.callOrder.push(val);
+    };
+    var passingValidatorMixin = {
+        validate: function() {
+            addToTestArray.call(this, 'passedMixin');
+        }
+    };
+    var failingValidatorMixin = {
+        validate: function() {
+            addToTestArray.call(this, 'failedMixin');
+            return 'failed';
+        }
+    };
+
+    // Test that model validate called before mixin validate; mixin validate not called if model validate fails
+    var FailingValidationModel = Brace.Model.extend({
+        mixins: [passingValidatorMixin],
+        validate: function() {
+            addToTestArray.call(this, 'failedModel');
+            return 'failed';
+        }
+    });
+    var failingModel = new FailingValidationModel();
+    failingModel.set('a', 'property');
+    deepEqual(failingModel.callOrder, ['failedModel']);
+
+    // Test that model validate called before mixin validate
+    var PassingValidationModel = Brace.Model.extend({
+        mixins: [passingValidatorMixin, failingValidatorMixin],
+        validate: function() {
+            addToTestArray.call(this, 'passedModel');
+        }
+    });
+    var passingModel = new PassingValidationModel();
+    passingModel.set('a', 'property');
+    deepEqual(passingModel.callOrder, ['passedModel', 'passedMixin', 'failedMixin']);
+});

@@ -215,10 +215,10 @@
                 if ("initialize" === key) {
                     var oldInitialize = proto.initialize;
                     proto.initialize = function() {
-                        mixin.initialize.apply(this, arguments);
                         if (oldInitialize) {
                             oldInitialize.apply(this, arguments);
                         }
+                        mixin.initialize.apply(this, arguments);
                     };
                     return;
                 }
@@ -226,13 +226,13 @@
                 if ("validate" === key) {
                     var oldValidate = proto.validate;
                     proto.validate = function() {
-                        var errors = mixin.validate.apply(this, arguments);
-                        if (errors) {
-                            return errors;
-                        }
                         if (oldValidate) {
-                            return oldValidate.apply(this, arguments);
+                            var errors = oldValidate.apply(this, arguments);
+                            if (errors) {
+                                return errors;
+                            }
                         }
+                        return mixin.validate.apply(this, arguments);
                     };
                     return;
                 }
