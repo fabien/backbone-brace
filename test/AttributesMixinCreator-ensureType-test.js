@@ -292,4 +292,36 @@
 			]
 		});
 	});
+
+    test('ensure round trip', function() {
+        var User = Brace.Model.extend({
+            namedAttributes : {
+                name: 'string',
+                emailAddress: 'string'
+            }
+        });
+        var UserCollection = Brace.Collection.extend({
+            model: User
+        });
+        var ChatRoom = Brace.Model.extend({
+            namedAttributes : {
+                title: 'string',
+                users: UserCollection
+            }
+        });
+        var json = {
+            title: 'Backbone brace help',
+            users: [
+                {
+                    name: 'Joe',
+                    emailAddress: 'joe@example.com'
+                },
+                {
+                    name: 'Jill',
+                    emailAddress: 'jill@example.org'
+                }
+            ]
+        };
+        deepEqual(new ChatRoom(json).toJSON(), json);
+    });
 }());

@@ -174,6 +174,31 @@
         return assumer.prototype instanceof assumed;
     }
 
+    /**
+     * @param {Object?} object
+     * @return {Object} plain object
+     */
+    function nestedToJSON(object) {
+        if (object != null) {
+            return _.reduce(object, function(memo, value, key) {
+                // prevent infinite loop
+                if (value != null && typeof value.toJSON === 'function') {
+                    memo[key] = value.toJSON();
+                }
+                return memo;
+            }, object);
+        } else {
+            return object;
+        }
+    }
+
+    function createToJSON(previousToJSON) {
+        return function toJSON() {
+            var json = previousToJSON.call(this);
+            return nestedToJSON(json);
+        };
+    }
+
     // ## Brace.Mixins ##
     // Mixin utilities
     Brace.Mixins = {
@@ -355,6 +380,11 @@
                 child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
                 Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
             }
+
+            if (child.prototype.toJSON) {
+                child.prototype.toJSON = createToJSON(child.prototype.toJSON);
+            }
+
             child.extend = newExtend;
             return child;
         };
