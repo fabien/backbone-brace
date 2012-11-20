@@ -179,10 +179,9 @@
      * @return {Object} plain object
      */
     function nestedToJSON(object) {
-        if (object != null) {
+        if (_.isObject(object)) {
             return _.reduce(object, function(memo, value, key) {
-                // prevent infinite loop
-                if (value != null && typeof value.toJSON === 'function') {
+                if (value && _.isFunction(value.toJSON)) {
                     memo[key] = value.toJSON();
                 }
                 return memo;
