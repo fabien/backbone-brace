@@ -1,4 +1,4 @@
-//     Backbone Brace - 2012/10/12
+//     Backbone Brace - 2012/10/27
 //     Copyright 2012 Atlassian Software Systems Pty Ltd
 //     Licensed under the Apache License, Version 2.0
 
@@ -178,6 +178,30 @@
         return assumer.prototype instanceof assumed;
     }
 
+    /**
+     * @param {Object?} object
+     * @return {Object} plain object
+     */
+    function nestedToJSON(object) {
+        if (_.isObject(object)) {
+            return _.reduce(object, function(memo, value, key) {
+                if (value && _.isFunction(value.toJSON)) {
+                    memo[key] = value.toJSON();
+                }
+                return memo;
+            }, object);
+        } else {
+            return object;
+        }
+    }
+
+    function createToJSON(previousToJSON) {
+        return function toJSON() {
+            var json = previousToJSON.call(this);
+            return nestedToJSON(json);
+        };
+    }
+
     // ## Brace.Mixins ##
     // Mixin utilities
     Brace.Mixins = {
@@ -195,10 +219,10 @@
                 if ("initialize" === key) {
                     var oldInitialize = proto.initialize;
                     proto.initialize = function() {
-                        mixin.initialize.apply(this, arguments);
                         if (oldInitialize) {
                             oldInitialize.apply(this, arguments);
                         }
+                        mixin.initialize.apply(this, arguments);
                     };
                     return;
                 }
@@ -206,13 +230,13 @@
                 if ("validate" === key) {
                     var oldValidate = proto.validate;
                     proto.validate = function() {
-                        var errors = mixin.validate.apply(this, arguments);
-                        if (errors) {
-                            return errors;
-                        }
                         if (oldValidate) {
-                            return oldValidate.apply(this, arguments);
+                            var errors = oldValidate.apply(this, arguments);
+                            if (errors) {
+                                return errors;
+                            }
                         }
+                        return mixin.validate.apply(this, arguments);
                     };
                     return;
                 }
@@ -359,6 +383,11 @@
                 child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
                 Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
             }
+
+            if (child.prototype.toJSON) {
+                child.prototype.toJSON = createToJSON(child.prototype.toJSON);
+            }
+
             child.extend = newExtend;
             return child;
         };
