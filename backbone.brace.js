@@ -183,6 +183,14 @@
             return _.reduce(object, function(memo, value, key) {
                 if (value && _.isFunction(value.toJSON)) {
                     memo[key] = value.toJSON();
+                } else if (_.isArray(value)) {
+                    memo[key] = _.map(value, function(el) {
+                        if (el && _.isFunction(el.toJSON)) {
+                            return el.toJSON();
+                        } else {
+                            return el;
+                        }
+                    });
                 }
                 return memo;
             }, object);
