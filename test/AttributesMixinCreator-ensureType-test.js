@@ -306,7 +306,8 @@
         var ChatRoom = Brace.Model.extend({
             namedAttributes : {
                 title: 'string',
-                users: UserCollection
+                users: UserCollection,
+                otherUsers : [ User ]
             }
         });
         var json = {
@@ -319,6 +320,16 @@
                 {
                     name: 'Jill',
                     emailAddress: 'jill@example.org'
+                }
+            ],
+            otherUsers: [
+                {
+                    name: 'Jan',
+                    emailAddress: 'jan@example.com'
+                },
+                {
+                    name: 'James',
+                    emailAddress: 'james@example.org'
                 }
             ]
         };

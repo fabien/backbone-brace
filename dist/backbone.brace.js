@@ -1,4 +1,4 @@
-//     Backbone Brace - 2012/10/27
+//     Backbone Brace - 2012/10/29
 //     Copyright 2012 Atlassian Software Systems Pty Ltd
 //     Licensed under the Apache License, Version 2.0
 
@@ -187,6 +187,14 @@
             return _.reduce(object, function(memo, value, key) {
                 if (value && _.isFunction(value.toJSON)) {
                     memo[key] = value.toJSON();
+                } else if (_.isArray(value)) {
+                    memo[key] = _.map(value, function(el) {
+                        if (el && _.isFunction(el.toJSON)) {
+                            return el.toJSON();
+                        } else {
+                            return el;
+                        }
+                    });
                 }
                 return memo;
             }, object);
