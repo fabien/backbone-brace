@@ -58,6 +58,9 @@ module.exports = function(grunt) {
     uglify: {}
   });
 
+  grunt.registerTask('waitForever', 'wait forever', function() { this.async(); });
+  grunt.registerTask('qunit-server', 'server waitForever');
+
   // Default task.
   grunt.registerTask('default', 'lint qunit concat min docco');
 

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 //     Backbone Brace - 2013/3/22
 //     Copyright 2013 Atlassian Software Systems Pty Ltd
+=======
+//     Backbone Brace - 2012/10/29
+//     Copyright 2012 Atlassian Software Systems Pty Ltd
+>>>>>>> origin/master
 //     Licensed under the Apache License, Version 2.0
 
 (function () {
@@ -187,6 +192,14 @@
             return _.reduce(object, function(memo, value, key) {
                 if (value && _.isFunction(value.toJSON)) {
                     memo[key] = value.toJSON();
+                } else if (_.isArray(value)) {
+                    memo[key] = _.map(value, function(el) {
+                        if (el && _.isFunction(el.toJSON)) {
+                            return el.toJSON();
+                        } else {
+                            return el;
+                        }
+                    });
                 }
                 return memo;
             }, object);
