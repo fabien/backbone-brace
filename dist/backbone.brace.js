@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 //     Backbone Brace - 2013/3/22
 //     Copyright 2013 Atlassian Software Systems Pty Ltd
-=======
-//     Backbone Brace - 2012/10/29
-//     Copyright 2012 Atlassian Software Systems Pty Ltd
->>>>>>> origin/master
 //     Licensed under the Apache License, Version 2.0
 
 (function () {
