@@ -324,3 +324,17 @@ test("Order of composed validate method", function() {
     passingModel.set('a', 'property');
     deepEqual(passingModel.callOrder, ['passedModel', 'passedMixin', 'failedMixin']);
 });
+
+test("Model parse parses only known attributes", function() {
+    var MyModel = Brace.Model.extend({
+        namedAttributes: ["name"]
+    });
+    var myModel = new MyModel();
+
+    deepEqual(myModel.parse({
+        name: "myName",
+        blah: "blahblah"
+    }), {
+        name: "myName"
+    });
+});
