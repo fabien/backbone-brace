@@ -50,13 +50,55 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> root = <span class="keyword">this</span>;
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> root = <span class="keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Store a reference to any other copies of Brace include (if any)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> previousBrace = root.Brace;
+
     <span class="keyword">var</span> Brace;
     <span class="keyword">if</span> (<span class="keyword">typeof</span> exports !== <span class="string">'undefined'</span>) {
         Brace = exports;
     } <span class="keyword">else</span> {
         Brace = root.Brace = {};
-    }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>noConflict will return this version of Brace and reset the global 
+Brace variable to the previously loaded version of Brace (or undefined
+if there was no previous version loaded).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
+     * Returns the current copy of Brace and sets the global Brace object to the
+     * previous version (or undefined if there was no previous version loaded). 
+     *
+     * @returns Object A reference to this version of Brace.
+     */</span>
+    Brace.noConflict = <span class="keyword">function</span>() {
+        root.Brace = previousBrace;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    };    
 
     <span class="keyword">var</span> _ = root._;
     <span class="keyword">if</span> (!_ &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)){ _ = require(<span class="string">'underscore'</span>); }
@@ -67,11 +109,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <h2>Helper functions</h2>
 <p>Given an array, this function will return an object where each
@@ -102,11 +144,11 @@ Given anything else, this function will return the object untouched.</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Return a value of the specified type, generated from the value parameter.
 If type conversion is necessary, this function will generate a new object using
@@ -174,11 +216,11 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Returns true if obj is extend()&#39;ed from Backbone.Collection (or from another collection)</p>
 
@@ -195,11 +237,11 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>obj <em>distantly</em> extends Backbone.Collection (most likely case)</p>
 
@@ -210,11 +252,11 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>obj <em>directly</em> extends Backbone.Collection (e.g., Brace.Collection)
 !(fn.prototype instanceof fn), so the above check doesn&#39;t catch this case.</p>
@@ -226,11 +268,11 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>obj <em>is</em> Backbone.Collection</p>
 
@@ -243,11 +285,11 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>array-like is currently defined by &quot;has a length property, and is not a string or
 function or Backbone.Collection.&quot;
@@ -266,11 +308,11 @@ Backbone.Collections are excluded because you can&#39;t do collection[0] to acce
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>With namedAttributes, we want to allow both the mixin, and the extender to define types.
 We want to take the stricter of the two types where possible.
@@ -295,11 +337,11 @@ Where the types conflict, throw an error.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>One type <em>assumes</em> another when the conditions for meeting its
 type-check are a super set of the assumed type&#39;s conditions.
@@ -315,11 +357,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-12">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>if it&#39;s a string, only the previous strict equality check would have sufficed.</p>
 
@@ -376,11 +418,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-13">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <h2>Brace.Mixins</h2>
 <p>Mixin utilities</p>
@@ -392,11 +434,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Creates a camelCased method name</p>
 
@@ -409,11 +451,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Applies a mixin to the given constructor&#39;s prototype.</p>
 
@@ -426,11 +468,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p><code>initialize</code> is not mixed in - we compose the mixin&#39;s initialize with the existing initialize method (if it exists).</p>
 
@@ -450,11 +492,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p><code>validate</code> is not mixed in - we compose the mixin&#39;s validate with the existing validate method (if it exists).</p>
 
@@ -477,11 +519,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p><code>defaults</code> are not mixed in - we compose the mixin&#39;s defaults with existing defaults if they exist</p>
 
@@ -502,11 +544,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-19">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p><code>namedAttributes</code> are added to the mixin, and we mixin in getters and setters for each attribute.</p>
 
@@ -522,11 +564,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p><code>namedEvents</code> are added to the mixin, and we mix in on and trigger methods for each event.</p>
 
@@ -537,11 +579,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p><code>events</code> must be an array</p>
 
@@ -560,11 +602,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Name collisions with other mixins or or the object we&#39;re mixing into result in violent and forceful disapproval.</p>
 
@@ -581,11 +623,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <h2>Brace.AttributesMixinCreator</h2>
 
@@ -596,11 +638,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Creates a mixin of getter and setter methods for each item in the given attribute list.
 A getter and setter for <code>id</code> is always generated.</p>
@@ -623,11 +665,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>TODO: has, escape, unset</p>
 
@@ -661,11 +703,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <h2>Brace.EventsMixinCreator</h2>
 
@@ -676,11 +718,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
 
@@ -693,11 +735,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>TODO: off</p>
 
@@ -721,11 +763,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Generates an <code>extend</code> method that overrides Backbone&#39;s default <code>extend</code>. The new extend calls Backbone&#39;s <code>extend</code>, then:</p>
 <ul>
@@ -744,11 +786,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Remove <code>mixins</code> - we don&#39;t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
 
@@ -793,11 +835,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Overrides Backbone&#39;s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
 
@@ -813,11 +855,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>TODO: has, escape, unset</p>
 
@@ -863,11 +905,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
 
@@ -886,11 +928,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
 
@@ -906,11 +948,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
 
@@ -926,11 +968,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Extend base Backbone classes</p>
 

@@ -2,12 +2,30 @@
 
     // node / browser imports, copied from here
     var root = this;
+
+    // Store a reference to any other copies of Brace include (if any)
+    var previousBrace = root.Brace;
+
     var Brace;
     if (typeof exports !== 'undefined') {
         Brace = exports;
     } else {
         Brace = root.Brace = {};
     }
+
+    // noConflict will return this version of Brace and reset the global 
+    // Brace variable to the previously loaded version of Brace (or undefined
+    // if there was no previous version loaded).
+    /**
+     * Returns the current copy of Brace and sets the global Brace object to the
+     * previous version (or undefined if there was no previous version loaded). 
+     *
+     * @returns Object A reference to this version of Brace.
+     */
+    Brace.noConflict = function() {
+        root.Brace = previousBrace;
+        return this;
+    };    
 
     var _ = root._;
     if (!_ && (typeof require !== 'undefined')){ _ = require('underscore'); }
