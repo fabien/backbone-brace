@@ -1,393 +1,951 @@
-<!DOCTYPE html>  <html> <head>   <title>backbone.brace.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               backbone.brace.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <pre><code>Backbone Brace - 2013/3/22
-Copyright 2013 Atlassian Software Systems Pty Ltd
-Licensed under the Apache License, Version 2.0
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>node / browser imports, copied from here</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">Brace</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Brace</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">Brace</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">Brace</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="p">}</span>
+<!DOCTYPE html>
 
-    <span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">_</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">require</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)){</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span> <span class="p">}</span>
+<html>
+<head>
+  <title>backbone.brace.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>backbone.brace.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*! 
+ *  Backbone Brace - 2013-04-30 
+ *  Copyright 2013 Atlassian Software Systems Pty Ltd
+ *  Licensed under the Apache License, Version 2.0
+ */</span> 
+(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>node / browser imports, copied from here</p>
 
-    <span class="kd">var</span> <span class="nx">Backbone</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">Backbone</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">Backbone</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">require</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">))</span> <span class="p">{</span> <span class="nx">Backbone</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;backbone&#39;</span><span class="p">);</span> <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Helper functions</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Given an array, this function will return an object where each
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> root = <span class="keyword">this</span>;
+    <span class="keyword">var</span> Brace;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> exports !== <span class="string">'undefined'</span>) {
+        Brace = exports;
+    } <span class="keyword">else</span> {
+        Brace = root.Brace = {};
+    }
+
+    <span class="keyword">var</span> _ = root._;
+    <span class="keyword">if</span> (!_ &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)){ _ = require(<span class="string">'underscore'</span>); }
+
+    <span class="keyword">var</span> Backbone = root.Backbone;
+    <span class="keyword">if</span> (!Backbone &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)) { Backbone = require(<span class="string">'backbone'</span>); }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2>Helper functions</h2>
+<p>Given an array, this function will return an object where each
     property name is an element of the original array. The value
     of each property will be null.
-Given anything else, this function will return the object untouched.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="cm">/**</span>
-<span class="cm">     * This function is used to ensure a consistent shape for the namedAttributes property.</span>
-<span class="cm">     * namedAttributes accepts two formats:</span>
-<span class="cm">     * - An array like [&#39;attr1&#39;, &#39;attr2&#39;] if you don&#39;t care about the type of any attribute.</span>
-<span class="cm">     * - An object like { attr1 : type1, attr2 : type2 } to specify an expected type.</span>
-<span class="cm">     *</span>
-<span class="cm">     * @param maybeArray {*} thing to transform into an object</span>
-<span class="cm">     */</span>
-    <span class="kd">function</span> <span class="nx">asObject</span><span class="p">(</span><span class="nx">maybeArray</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">maybeArray</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">maybeArray</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">obj</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span>  <span class="kc">null</span><span class="p">;</span>
-                <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
-            <span class="p">},</span> <span class="p">{});</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">maybeArray</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Return a value of the specified type, generated from the value parameter.
+Given anything else, this function will return the object untouched.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
+     * This function is used to ensure a consistent shape for the namedAttributes property.
+     * namedAttributes accepts two formats:
+     * - An array like ['attr1', 'attr2'] if you don't care about the type of any attribute.
+     * - An object like { attr1 : type1, attr2 : type2 } to specify an expected type.
+     *
+     * @param maybeArray {*} thing to transform into an object
+     */</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">asObject</span><span class="params">(maybeArray)</span> {</span>
+        <span class="keyword">if</span> (_.isArray(maybeArray)) {
+            <span class="keyword">return</span> _.reduce(maybeArray, <span class="keyword">function</span>(obj, prop) {
+                obj[prop] =  <span class="literal">null</span>;
+                <span class="keyword">return</span> obj;
+            }, {});
+        }
+        <span class="keyword">return</span> maybeArray;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Return a value of the specified type, generated from the value parameter.
 If type conversion is necessary, this function will generate a new object using
 <code>new type(value)</code></p>
-
 <p><code>value</code> Any value. null and undefined values will be untouched.</p>
-
 <p><code>type</code> When given:</p>
-
 <ul>
 <li>a falsy value: this function will do no type conversion.</li>
 <li>a string: this function will throw if <code>typeof value !== type</code>, and return value otherwise.</li>
 <li>an Array: this function will be recursively called for each element in value using
-type's first element as the type. E.g.,
-    <code>ensureType([ Number ], [ 1 ])</code> will recursively call <code>ensureType(Number, 1)</code>
+type&#39;s first element as the type. E.g.,<pre><code>  `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`</code></pre>
 It will return a new array consisting of the result of each recursive call.</li>
 <li>a Backbone.Collection constructor: this function may be recursively called for each element in 
-value using type.model as the type. E.g.,
-    <code>ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])</code> will
-    recursively call <code>ensureType(Number, 1)</code>
-It will return a Backbone.Collection via new type({array of recursive results})</li>
+  value using type.model as the type. E.g.,<pre><code>  `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
+  recursively call `ensureType(Number, 1)`</code></pre>
+  It will return a Backbone.Collection via new type({array of recursive results})</li>
 <li>a function: This will check value instanceof type, and if false, will return <code>new type(value)</code>
-Otherwise it will return value directly</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="cm">/**</span>
-<span class="cm">     * @param value {*}</span>
-<span class="cm">     * @param type {Array|function(new:*, *)|string|false|null|undefined}</span>
-<span class="cm">     */</span>
-    <span class="kd">function</span> <span class="nx">ensureType</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-        <span class="cm">/*jshint newcap: false */</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">||</span> <span class="nx">value</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-        <span class="p">}</span>
+  Otherwise it will return value directly</li>
+</ul>
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="o">||</span> <span class="nx">type</span> <span class="k">instanceof</span> <span class="nb">String</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="s2">&quot;The typeof &quot;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">+</span> <span class="s2">&quot; but expected it to be &quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-        <span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
+     * @param value {*}
+     * @param type {Array|function(new:*, *)|string|false|null|undefined}
+     */</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">ensureType</span><span class="params">(type, value)</span> {</span>
+        <span class="comment">/*jshint newcap: false */</span>
+        <span class="keyword">if</span> (!type || value == <span class="literal">null</span>) {
+            <span class="keyword">return</span> value;
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="o">||</span> <span class="nx">type</span> <span class="o">===</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isArrayLike</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="s2">&quot;Array type expected, but nonnull, non-Array value provided.&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nx">type</span> <span class="o">===</span> <span class="nb">Array</span> <span class="o">||</span> <span class="o">!</span><span class="nx">type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">?</span>
-                <span class="nx">value</span> <span class="o">:</span>
-                <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">ensureType</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">type</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
-        <span class="p">}</span>
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> type === <span class="string">'string'</span> || type <span class="keyword">instanceof</span> String) {
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> value !== <span class="string">""</span>+type) {
+                <span class="keyword">throw</span> <span class="string">"The typeof "</span> + value + <span class="string">" is "</span> + <span class="keyword">typeof</span> value + <span class="string">" but expected it to be "</span> + type;
+            }
+            <span class="keyword">return</span> value;
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">type</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="s2">&quot;Invalid expected type &quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span>
-            <span class="s1">&#39;. Should be falsy, String, Array, Backbone.Collection constructor, or function.&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="keyword">if</span> (_.isArray(type) || type === Array) {
+            <span class="keyword">if</span> (!isArrayLike(value)) {
+                <span class="keyword">throw</span> <span class="string">"Array type expected, but nonnull, non-Array value provided."</span>;
+            }
+            <span class="keyword">return</span> type === Array || !type[<span class="number">0</span>] ?
+                value :
+                _.map(value, _.bind(ensureType, <span class="literal">null</span>, type[<span class="number">0</span>]));
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> type !== <span class="string">'function'</span>) {
+            <span class="keyword">throw</span> <span class="string">"Invalid expected type "</span> + type +
+            <span class="string">'. Should be falsy, String, Array, Backbone.Collection constructor, or function.'</span>;
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">isCollectionConstructor</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="nx">type</span><span class="p">(</span><span class="nx">ensureType</span><span class="p">([</span> <span class="nx">type</span><span class="p">.</span><span class="nx">model</span> <span class="p">],</span> <span class="nx">value</span><span class="p">));</span>
-        <span class="p">}</span>
+        <span class="keyword">if</span> (value <span class="keyword">instanceof</span> type) {
+            <span class="keyword">return</span> value;
+        }
 
-        <span class="k">return</span> <span class="k">new</span> <span class="nx">type</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Returns true if obj is extend()'ed from Backbone.Collection (or from another collection)</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="cm">/**</span>
-<span class="cm">     * @param obj {*} object to check</span>
-<span class="cm">     * @param rootConstructor {?function(new:Backbone.Collection)} optional constructor that inherits from</span>
-<span class="cm">     *        Backbone.Collection. Will check that obj is extend()&#39;ed from this instead of Backbone.Collection.</span>
-<span class="cm">     */</span>
-    <span class="kd">function</span> <span class="nx">isCollectionConstructor</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">rootConstructor</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span>  <span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="p">(</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>obj <em>distantly</em> extends Backbone.Collection (most likely case)</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">obj</span><span class="p">.</span><span class="nx">__super__</span> <span class="k">instanceof</span> <span class="p">(</span><span class="nx">rootConstructor</span> <span class="o">||</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">)</span> <span class="o">||</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>obj <em>directly</em> extends Backbone.Collection (e.g., Brace.Collection)
-!(fn.prototype instanceof fn), so the above check doesn't catch this case.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">obj</span><span class="p">.</span><span class="nx">__super__</span> <span class="o">===</span> <span class="p">(</span><span class="nx">rootConstructor</span> <span class="o">||</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">).</span><span class="nx">prototype</span> <span class="o">||</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>obj <em>is</em> Backbone.Collection</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">obj</span> <span class="o">===</span> <span class="p">(</span><span class="nx">rootConstructor</span> <span class="o">||</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">)</span>
-        <span class="p">);</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>array-like is currently defined by "has a length property, and is not a string or
-function or Backbone.Collection."
-Backbone.Collections are excluded because you can't do collection[0] to access models.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">isArrayLike</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span><span class="s1">&#39;length&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span>
-            <span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">String</span> <span class="o">||</span>
-            <span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">({</span><span class="s1">&#39;string&#39;</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">)</span> <span class="o">||</span>
-            <span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span>
-        <span class="p">);</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>With namedAttributes, we want to allow both the mixin, and the extender to define types.
+        <span class="keyword">if</span> (isCollectionConstructor(type)) {
+            <span class="keyword">return</span> <span class="keyword">new</span> type(ensureType([ type.model ], value));
+        }
+
+        <span class="keyword">return</span> <span class="keyword">new</span> type(value);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Returns true if obj is extend()&#39;ed from Backbone.Collection (or from another collection)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
+     * @param obj {*} object to check
+     * @param rootConstructor {?function(new:Backbone.Collection)} optional constructor that inherits from
+     *        Backbone.Collection. Will check that obj is extend()'ed from this instead of Backbone.Collection.
+     */</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">isCollectionConstructor</span><span class="params">(obj, rootConstructor)</span> {</span>
+        <span class="keyword">return</span>  obj &amp;&amp; (</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>obj <em>distantly</em> extends Backbone.Collection (most likely case)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            obj.__super__ <span class="keyword">instanceof</span> (rootConstructor || Backbone.Collection) ||</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>obj <em>directly</em> extends Backbone.Collection (e.g., Brace.Collection)
+!(fn.prototype instanceof fn), so the above check doesn&#39;t catch this case.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            obj.__super__ === (rootConstructor || Backbone.Collection).prototype ||</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>obj <em>is</em> Backbone.Collection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            obj === (rootConstructor || Backbone.Collection)
+        );
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>array-like is currently defined by &quot;has a length property, and is not a string or
+function or Backbone.Collection.&quot;
+Backbone.Collections are excluded because you can&#39;t do collection[0] to access models.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">isArrayLike</span><span class="params">(value)</span> {</span>
+        <span class="keyword">return</span> _.has(value,<span class="string">'length'</span>) &amp;&amp; !(
+            value <span class="keyword">instanceof</span> String ||
+            _.has({<span class="string">'string'</span>:<span class="number">1</span>, <span class="string">'function'</span>:<span class="number">1</span>}, <span class="keyword">typeof</span> value) ||
+            value <span class="keyword">instanceof</span> Backbone.Collection
+        );
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>With namedAttributes, we want to allow both the mixin, and the extender to define types.
 We want to take the stricter of the two types where possible.
-Where the types conflict, throw an error.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">nonConflictedTypes</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">refObj</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">newObj</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">refObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">||</span> <span class="nx">assumes</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="nx">refObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]))</span> <span class="p">{</span>
-                <span class="nx">newObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">val</span> <span class="o">||</span> <span class="nx">assumes</span><span class="p">(</span><span class="nx">refObj</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">val</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="nx">key</span> <span class="o">+</span> <span class="s2">&quot; has conflicted type descriptors.&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
-        <span class="k">return</span> <span class="nx">newObj</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>One type <em>assumes</em> another when the conditions for meeting its
-type-check are a super set of the assumed type's conditions.
-E.g., <code>[ 'string' ]</code> assumes <code>Array</code> because you can't have an array of strings without an array.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">assumes</span><span class="p">(</span><span class="nx">assumer</span><span class="p">,</span> <span class="nx">assumed</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">assumed</span> <span class="o">||</span> <span class="nx">assumed</span> <span class="o">===</span> <span class="nx">assumer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p>if it's a string, only the previous strict equality check would have sufficed.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">assumer</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">assumer</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">assumer</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">assumed</span> <span class="o">===</span> <span class="nb">Array</span> <span class="o">||</span>
-                <span class="p">(</span><span class="nx">assumed</span> <span class="k">instanceof</span> <span class="nb">Array</span> <span class="o">&amp;&amp;</span> <span class="nx">assumes</span><span class="p">(</span><span class="nx">assumer</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">assumed</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">assumed</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">isCollectionConstructor</span><span class="p">(</span><span class="nx">assumed</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">isCollectionConstructor</span><span class="p">(</span><span class="nx">assumer</span><span class="p">,</span> <span class="nx">assumed</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">assumer</span><span class="p">.</span><span class="nx">prototype</span> <span class="k">instanceof</span> <span class="nx">assumed</span><span class="p">;</span>
-    <span class="p">}</span>
+Where the types conflict, throw an error.</p>
 
-    <span class="cm">/**</span>
-<span class="cm">     * @param {Object?} object</span>
-<span class="cm">     * @return {Object} plain object</span>
-<span class="cm">     */</span>
-    <span class="kd">function</span> <span class="nx">nestedToJSON</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span><span class="nx">object</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">memo</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">();</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">memo</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">))</span> <span class="p">{</span>
-                            <span class="k">return</span> <span class="nx">el</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">();</span>
-                        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                            <span class="k">return</span> <span class="nx">el</span><span class="p">;</span>
-                        <span class="p">}</span>
-                    <span class="p">});</span>
-                <span class="p">}</span>
-                <span class="k">return</span> <span class="nx">memo</span><span class="p">;</span>
-            <span class="p">},</span> <span class="nx">object</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">nonConflictedTypes</span><span class="params">(obj, refObj)</span> {</span>
+        <span class="keyword">var</span> newObj = {};
+        _.each(obj, <span class="keyword">function</span>(val, key) {
+            <span class="keyword">if</span> (!refObj[key] || assumes(val, refObj[key])) {
+                newObj[key] = val;
+            } <span class="keyword">else</span> <span class="keyword">if</span> (!val || assumes(refObj[key], val)) {
+                <span class="keyword">return</span>;
+            } <span class="keyword">else</span> {
+                <span class="keyword">throw</span> key + <span class="string">" has conflicted type descriptors."</span>;
+            }
+        });
+        <span class="keyword">return</span> newObj;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>One type <em>assumes</em> another when the conditions for meeting its
+type-check are a super set of the assumed type&#39;s conditions.
+E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you can&#39;t have an array of strings without an array.</p>
 
-    <span class="kd">function</span> <span class="nx">createToJSON</span><span class="p">(</span><span class="nx">previousToJSON</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kd">function</span> <span class="nx">toJSON</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">previousToJSON</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-            <span class="k">return</span> <span class="nx">nestedToJSON</span><span class="p">(</span><span class="nx">json</span><span class="p">);</span>
-        <span class="p">};</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h2>Brace.Mixins</h2>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">assumes</span><span class="params">(assumer, assumed)</span> {</span>
+        <span class="keyword">if</span> (!assumed || assumed === assumer) {
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>if it&#39;s a string, only the previous strict equality check would have sufficed.</p>
 
-<p>Mixin utilities</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Creates a camelCased method name</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">createMethodName</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prefix</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">suffix</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">suffix</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>Applies a mixin to the given constructor's prototype.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">applyMixin</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ctor</span><span class="p">,</span> <span class="nx">mixin</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">_</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">mixin</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">ctor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p><code>initialize</code> is not mixed in - we compose the mixin's initialize with the existing initialize method (if it exists).</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;initialize&quot;</span> <span class="o">===</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">oldInitialize</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">initialize</span><span class="p">;</span>
-                    <span class="nx">proto</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="nx">oldInitialize</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">oldInitialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-                        <span class="p">}</span>
-                        <span class="nx">mixin</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-                    <span class="p">};</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p><code>validate</code> is not mixed in - we compose the mixin's validate with the existing validate method (if it exists).</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;validate&quot;</span> <span class="o">===</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">oldValidate</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">validate</span><span class="p">;</span>
-                    <span class="nx">proto</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="nx">oldValidate</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="kd">var</span> <span class="nx">errors</span> <span class="o">=</span> <span class="nx">oldValidate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-                            <span class="k">if</span> <span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
-                                <span class="k">return</span> <span class="nx">errors</span><span class="p">;</span>
-                            <span class="p">}</span>
-                        <span class="p">}</span>
-                        <span class="k">return</span> <span class="nx">mixin</span><span class="p">.</span><span class="nx">validate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-                    <span class="p">};</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p><code>defaults</code> are not mixed in - we compose the mixin's defaults with existing defaults if they exist</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;defaults&quot;</span> <span class="o">===</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">||</span> <span class="p">(</span><span class="nx">proto</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{});</span>
-                    <span class="kd">var</span> <span class="nx">mixinDefaults</span> <span class="o">=</span> <span class="nx">mixin</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-                    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">id</span> <span class="k">in</span> <span class="nx">mixinDefaults</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
-                            <span class="k">throw</span> <span class="s2">&quot;Mixin error: class already has default &#39;&quot;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;&#39; defined&quot;</span><span class="p">;</span>
-                        <span class="p">}</span>
-                        <span class="nx">defaults</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">mixinDefaults</span><span class="p">[</span><span class="nx">id</span><span class="p">];</span>
-                    <span class="p">}</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <p><code>namedAttributes</code> are added to the mixin, and we mixin in getters and setters for each attribute.</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;namedAttributes&quot;</span> <span class="o">===</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">protoAttrs</span> <span class="o">=</span> <span class="nx">asObject</span><span class="p">(</span><span class="nx">proto</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
-                    <span class="kd">var</span> <span class="nx">mixinAttrs</span> <span class="o">=</span> <span class="nx">asObject</span><span class="p">(</span><span class="nx">mixin</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
-                    <span class="nx">proto</span><span class="p">.</span><span class="nx">namedAttributes</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">protoAttrs</span><span class="p">,</span> <span class="nx">nonConflictedTypes</span><span class="p">(</span><span class="nx">mixinAttrs</span><span class="p">,</span> <span class="nx">protoAttrs</span><span class="p">));</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p><code>namedEvents</code> are added to the mixin, and we mix in on and trigger methods for each event.</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;namedEvents&quot;</span> <span class="o">===</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <p><code>events</code> must be an array</p>             </td>             <td class="code">               <div class="highlight"><pre>                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">mixin</span><span class="p">[</span><span class="nx">key</span><span class="p">]))</span> <span class="p">{</span>
-                        <span class="k">throw</span> <span class="s2">&quot;Expects events member on mixin to be an array&quot;</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">proto</span><span class="p">.</span><span class="nx">namedEvents</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">proto</span><span class="p">.</span><span class="nx">namedEvents</span> <span class="o">=</span> <span class="p">[];</span>
-                    <span class="p">}</span>
-                    <span class="nx">proto</span><span class="p">.</span><span class="nx">namedEvents</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniq</span><span class="p">(</span><span class="nx">proto</span><span class="p">.</span><span class="nx">namedEvents</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">mixin</span><span class="p">[</span><span class="nx">key</span><span class="p">]));</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <p>Name collisions with other mixins or or the object we're mixing into result in violent and forceful disapproval.</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="k">if</span> <span class="p">(</span><span class="nx">proto</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="s2">&quot;Mixin error: class already has property &#39;&quot;</span> <span class="o">+</span> <span class="nx">key</span> <span class="o">+</span> <span class="s2">&quot;&#39; defined&quot;</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="nx">proto</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">mixin</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-            <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h2>Brace.AttributesMixinCreator</h2>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">Brace</span><span class="p">.</span><span class="nx">AttributesMixinCreator</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <p>Creates a mixin of getter and setter methods for each item in the given attribute list.
-A getter and setter for <code>id</code> is always generated.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">methods</span> <span class="o">=</span> <span class="p">{};</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!assumer || <span class="keyword">typeof</span> assumer === <span class="string">'string'</span>) {
+            <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">if</span> (assumer <span class="keyword">instanceof</span> Array) {
+            <span class="keyword">return</span> assumed === Array ||
+                (assumed <span class="keyword">instanceof</span> Array &amp;&amp; assumes(assumer[<span class="number">0</span>], assumed[<span class="number">0</span>]));
+        }
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> assumed !== <span class="string">'function'</span>) {
+            <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">if</span> (isCollectionConstructor(assumed)) {
+            <span class="keyword">return</span> isCollectionConstructor(assumer, assumed);
+        }
+        <span class="keyword">return</span> assumer.prototype <span class="keyword">instanceof</span> assumed;
+    }
 
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">attributes</span> <span class="o">=</span> <span class="p">{};</span>
-            <span class="p">}</span>
+    <span class="comment">/**
+     * @param {Object?} object
+     * @return {Object} plain object
+     */</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">nestedToJSON</span><span class="params">(object)</span> {</span>
+        <span class="keyword">if</span> (_.isObject(object)) {
+            <span class="keyword">return</span> _.reduce(object, <span class="keyword">function</span>(memo, value, key) {
+                <span class="keyword">if</span> (value &amp;&amp; _.isFunction(value.toJSON)) {
+                    memo[key] = value.toJSON();
+                } <span class="keyword">else</span> <span class="keyword">if</span> (_.isArray(value)) {
+                    memo[key] = _.map(value, <span class="keyword">function</span>(el) {
+                        <span class="keyword">if</span> (el &amp;&amp; _.isFunction(el.toJSON)) {
+                            <span class="keyword">return</span> el.toJSON();
+                        } <span class="keyword">else</span> {
+                            <span class="keyword">return</span> el;
+                        }
+                    });
+                }
+                <span class="keyword">return</span> memo;
+            }, object);
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> object;
+        }
+    }
 
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-            <span class="p">}</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">createToJSON</span><span class="params">(previousToJSON)</span> {</span>
+        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">toJSON</span><span class="params">()</span> {</span>
+            <span class="keyword">var</span> json = previousToJSON.call(<span class="keyword">this</span>);
+            <span class="keyword">return</span> nestedToJSON(json);
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2>Brace.Mixins</h2>
+<p>Mixin utilities</p>
 
-            <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">expectedType</span><span class="p">,</span> <span class="nx">attrName</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <p>TODO: has, escape, unset</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="kd">var</span> <span class="nx">setter</span> <span class="o">=</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">createMethodName</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span> <span class="nx">attrName</span><span class="p">);</span>
-                <span class="nx">methods</span><span class="p">[</span><span class="nx">setter</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">,</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">attrName</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-                <span class="p">};</span>
-                <span class="kd">var</span> <span class="nx">getter</span> <span class="o">=</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">createMethodName</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nx">attrName</span><span class="p">);</span>
-                <span class="nx">methods</span><span class="p">[</span><span class="nx">getter</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attrName</span><span class="p">);</span>
-                <span class="p">};</span>
-            <span class="p">});</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Brace.Mixins = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Creates a camelCased method name</p>
 
-            <span class="k">return</span> <span class="nx">methods</span><span class="p">;</span>
-        <span class="p">},</span>
-        <span class="cm">/**</span>
-<span class="cm">         * See JSDoc for this function in the backbone.brace file.</span>
-<span class="cm">         *</span>
-<span class="cm">         * Expose the ensureType function for people with custom constructors that don&#39;t call</span>
-<span class="cm">         * .set() to initialize attributes. Hopefully this is rarely used, as I would</span>
-<span class="cm">         * consider not calling .set() to be a code smell.</span>
-<span class="cm">         *</span>
-<span class="cm">         * @param type</span>
-<span class="cm">         * @param value</span>
-<span class="cm">         */</span>
-        <span class="nx">ensureType</span> <span class="o">:</span> <span class="nx">ensureType</span>
-    <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <h2>Brace.EventsMixinCreator</h2>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">Brace</span><span class="p">.</span><span class="nx">EventsMixinCreator</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">events</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">eventMethods</span> <span class="o">=</span> <span class="p">{};</span>
-            <span class="kd">var</span> <span class="nx">createEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">eventName</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <p>TODO: off</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="kd">var</span> <span class="nx">binder</span> <span class="o">=</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">createMethodName</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="nx">eventName</span><span class="p">);</span>
-                <span class="nx">eventMethods</span><span class="p">[</span><span class="nx">binder</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">[</span><span class="nx">eventName</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
-                <span class="p">};</span>
-                <span class="kd">var</span> <span class="nx">trigger</span> <span class="o">=</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">createMethodName</span><span class="p">(</span><span class="s2">&quot;trigger&quot;</span><span class="p">,</span> <span class="nx">eventName</span><span class="p">);</span>
-                <span class="nx">eventMethods</span><span class="p">[</span><span class="nx">trigger</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">[</span><span class="nx">eventName</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
-                <span class="p">};</span>
-            <span class="p">};</span>
-            <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">events</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">createEvent</span><span class="p">,</span><span class="k">this</span><span class="p">));</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        createMethodName: <span class="keyword">function</span>(prefix, suffix) {
+            <span class="keyword">return</span> prefix + suffix.charAt(<span class="number">0</span>).toUpperCase() + suffix.substr(<span class="number">1</span>);
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Applies a mixin to the given constructor&#39;s prototype.</p>
 
-            <span class="k">return</span> <span class="nx">eventMethods</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <p>Generates an <code>extend</code> method that overrides Backbone's default <code>extend</code>. The new extend calls Backbone's <code>extend</code>, then:</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        applyMixin: <span class="keyword">function</span>(ctor, mixin) {
+            _.forEach(_.keys(mixin), <span class="keyword">function</span>(key) {
+                <span class="keyword">var</span> proto = ctor.prototype;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p><code>initialize</code> is not mixed in - we compose the mixin&#39;s initialize with the existing initialize method (if it exists).</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"initialize"</span> === key) {
+                    <span class="keyword">var</span> oldInitialize = proto.initialize;
+                    proto.initialize = <span class="keyword">function</span>() {
+                        <span class="keyword">if</span> (oldInitialize) {
+                            oldInitialize.apply(<span class="keyword">this</span>, arguments);
+                        }
+                        mixin.initialize.apply(<span class="keyword">this</span>, arguments);
+                    };
+                    <span class="keyword">return</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p><code>validate</code> is not mixed in - we compose the mixin&#39;s validate with the existing validate method (if it exists).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"validate"</span> === key) {
+                    <span class="keyword">var</span> oldValidate = proto.validate;
+                    proto.validate = <span class="keyword">function</span>() {
+                        <span class="keyword">if</span> (oldValidate) {
+                            <span class="keyword">var</span> errors = oldValidate.apply(<span class="keyword">this</span>, arguments);
+                            <span class="keyword">if</span> (errors) {
+                                <span class="keyword">return</span> errors;
+                            }
+                        }
+                        <span class="keyword">return</span> mixin.validate.apply(<span class="keyword">this</span>, arguments);
+                    };
+                    <span class="keyword">return</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p><code>defaults</code> are not mixed in - we compose the mixin&#39;s defaults with existing defaults if they exist</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"defaults"</span> === key) {
+                    <span class="keyword">var</span> defaults = proto.defaults || (proto.defaults = {});
+                    <span class="keyword">var</span> mixinDefaults = mixin[key];
+                    <span class="keyword">for</span> (<span class="keyword">var</span> id <span class="keyword">in</span> mixinDefaults) {
+                        <span class="keyword">if</span> (defaults.hasOwnProperty(id)) {
+                            <span class="keyword">throw</span> <span class="string">"Mixin error: class already has default '"</span> + id + <span class="string">"' defined"</span>;
+                        }
+                        defaults[id] = mixinDefaults[id];
+                    }
+                    <span class="keyword">return</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p><code>namedAttributes</code> are added to the mixin, and we mixin in getters and setters for each attribute.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"namedAttributes"</span> === key) {
+                    <span class="keyword">var</span> protoAttrs = asObject(proto.namedAttributes) || {};
+                    <span class="keyword">var</span> mixinAttrs = asObject(mixin[key]);
+                    proto.namedAttributes = _.extend(protoAttrs, nonConflictedTypes(mixinAttrs, protoAttrs));
+                    <span class="keyword">return</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p><code>namedEvents</code> are added to the mixin, and we mix in on and trigger methods for each event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"namedEvents"</span> === key) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p><code>events</code> must be an array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (!_.isArray(mixin[key])) {
+                        <span class="keyword">throw</span> <span class="string">"Expects events member on mixin to be an array"</span>;
+                    }
+                    <span class="keyword">if</span> (!proto.namedEvents) {
+                        proto.namedEvents = [];
+                    }
+                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
+                    <span class="keyword">return</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Name collisions with other mixins or or the object we&#39;re mixing into result in violent and forceful disapproval.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (proto.hasOwnProperty(key)) {
+                    <span class="keyword">throw</span> <span class="string">"Mixin error: class already has property '"</span> + key + <span class="string">"' defined"</span>;
+                }
+                proto[key] = mixin[key];
+            }, <span class="keyword">this</span>);
+        }
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h2>Brace.AttributesMixinCreator</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Brace.AttributesMixinCreator = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Creates a mixin of getter and setter methods for each item in the given attribute list.
+A getter and setter for <code>id</code> is always generated.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        create: <span class="keyword">function</span>(attributes) {
+            <span class="keyword">var</span> methods = {};
+
+            <span class="keyword">if</span> (!attributes) {
+                attributes = {};
+            }
+
+            <span class="keyword">if</span> (!_.has(attributes, <span class="string">"id"</span>)) {
+                attributes.id = <span class="literal">null</span>;
+            }
+
+            _.each(attributes, <span class="function"><span class="keyword">function</span> <span class="params">(expectedType, attrName)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>TODO: has, escape, unset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> setter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, attrName);
+                methods[setter] = <span class="function"><span class="keyword">function</span> <span class="params">(val,options)</span> {</span>
+                    <span class="keyword">return</span> <span class="keyword">this</span>.set(attrName, val, options);
+                };
+                <span class="keyword">var</span> getter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, attrName);
+                methods[getter] = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    <span class="keyword">return</span> <span class="keyword">this</span>.get(attrName);
+                };
+            });
+
+            <span class="keyword">return</span> methods;
+        },
+        <span class="comment">/**
+         * See JSDoc for this function in the backbone.brace file.
+         *
+         * Expose the ensureType function for people with custom constructors that don't call
+         * .set() to initialize attributes. Hopefully this is rarely used, as I would
+         * consider not calling .set() to be a code smell.
+         *
+         * @param type
+         * @param value
+         */</span>
+        ensureType : ensureType
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h2>Brace.EventsMixinCreator</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Brace.EventsMixinCreator = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        create: <span class="keyword">function</span>(events) {
+            <span class="keyword">var</span> eventMethods = {};
+            <span class="keyword">var</span> createEvent = <span class="keyword">function</span>(eventName) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>TODO: off</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="string">"on"</span>, eventName);
+                eventMethods[binder] = <span class="keyword">function</span>() {
+                    <span class="keyword">return</span> <span class="keyword">this</span>.on.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
+                };
+                <span class="keyword">var</span> trigger = Brace.Mixins.createMethodName(<span class="string">"trigger"</span>, eventName);
+                eventMethods[trigger] = <span class="keyword">function</span>() {
+                    <span class="keyword">return</span> <span class="keyword">this</span>.trigger.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
+                };
+            };
+            _.each(events, _.bind(createEvent,<span class="keyword">this</span>));
+
+            <span class="keyword">return</span> eventMethods;
+        }
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Generates an <code>extend</code> method that overrides Backbone&#39;s default <code>extend</code>. The new extend calls Backbone&#39;s <code>extend</code>, then:</p>
 <ul>
 <li>Adds all mixins specified in the <code>mixins</code> array</li>
 <li>Adds a <code>Brace.EventsMixinCreator</code> to mix in on and trigger methods for events specified in the <code>namedEvents</code> array</li>
 <li>Adds a <code>Brace.AttributesMixinCreator</code> to mix in get and set methods for attributes specified in the <code>attributes</code> array</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">generateMixinExtend</span><span class="p">(</span><span class="nx">oldExtend</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kd">function</span> <span class="nx">newExtend</span><span class="p">(</span><span class="nx">protoProps</span><span class="p">,</span> <span class="nx">classProps</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">child</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">cleanProtoProps</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">protoProps</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <p>Remove <code>mixins</code> - we don't want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="kd">var</span> <span class="nx">mixins</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">protoProps</span> <span class="o">&amp;&amp;</span> <span class="nx">protoProps</span><span class="p">.</span><span class="nx">mixins</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">mixins</span> <span class="o">=</span> <span class="nx">protoProps</span><span class="p">.</span><span class="nx">mixins</span><span class="p">;</span>
-                <span class="k">delete</span> <span class="nx">cleanProtoProps</span><span class="p">.</span><span class="nx">mixins</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">child</span> <span class="o">=</span> <span class="nx">oldExtend</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">cleanProtoProps</span><span class="p">,</span> <span class="nx">classProps</span><span class="p">);</span>
+</ul>
 
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedEvents</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">applyMixin</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="p">{</span> <span class="nx">namedEvents</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedEvents</span> <span class="p">});</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">applyMixin</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="p">{</span> <span class="nx">namedAttributes</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span> <span class="p">});</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">mixins</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">protoProps</span><span class="p">.</span><span class="nx">mixins</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mixin</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">applyMixin</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">mixin</span><span class="p">);</span>
-                <span class="p">});</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedEvents</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">applyMixin</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">EventsMixinCreator</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedEvents</span><span class="p">));</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span> <span class="o">=</span> <span class="nx">asObject</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">);</span>
-                <span class="nx">Brace</span><span class="p">.</span><span class="nx">Mixins</span><span class="p">.</span><span class="nx">applyMixin</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">Brace</span><span class="p">.</span><span class="nx">AttributesMixinCreator</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">));</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toJSON</span> <span class="o">=</span> <span class="nx">createToJSON</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="nx">child</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="nx">newExtend</span><span class="p">;</span>
-            <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
-        <span class="p">};</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>Overrides Backbone's <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">overrideSetGet</span><span class="p">(</span><span class="nx">ctor</span><span class="p">,</span> <span class="nx">childCtor</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">ctor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">childProto</span> <span class="o">=</span> <span class="nx">childCtor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-
-        <span class="kd">var</span> <span class="nx">oldSet</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
-        <span class="nx">childProto</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <p>TODO: has, escape, unset</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="kd">var</span> <span class="nx">attrs</span><span class="p">,</span>
-                <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">;</span>
+            </div>
             
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attributes</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="nx">oldSet</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>    
-            <span class="p">}</span>
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">generateMixinExtend</span><span class="params">(oldExtend)</span> {</span>
+        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">newExtend</span><span class="params">(protoProps, classProps)</span> {</span>
+            <span class="keyword">var</span> child;
+            <span class="keyword">var</span> cleanProtoProps = _.extend({}, protoProps);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Remove <code>mixins</code> - we don&#39;t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-                <span class="nx">options</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{};</span>
-                <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-            <span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> mixins;
+            <span class="keyword">if</span> (protoProps &amp;&amp; protoProps.mixins) {
+                mixins = protoProps.mixins;
+                <span class="keyword">delete</span> cleanProtoProps.mixins;
+            }
+            child = oldExtend.call(<span class="keyword">this</span>, cleanProtoProps, classProps);
 
-            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">attrs</span><span class="p">,</span> <span class="nx">attr</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">continue</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">attr</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="s2">&quot;Attribute &#39;&quot;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s2">&quot;&#39; does not exist&quot;</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="nx">attrs</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ensureType</span><span class="p">(</span><span class="nx">attributes</span><span class="p">[</span><span class="nx">attr</span><span class="p">],</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">attr</span><span class="p">]);</span>
-            <span class="p">}</span>
+            <span class="keyword">if</span> (<span class="keyword">this</span>.prototype.namedEvents) {
+                Brace.Mixins.applyMixin(child, { namedEvents : <span class="keyword">this</span>.prototype.namedEvents });
+            }
+            <span class="keyword">if</span> (<span class="keyword">this</span>.prototype.namedAttributes) {
+                Brace.Mixins.applyMixin(child, { namedAttributes : <span class="keyword">this</span>.prototype.namedAttributes });
+            }
 
-            <span class="k">return</span> <span class="nx">oldSet</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>    
-        <span class="p">};</span>
+            <span class="keyword">if</span> (mixins) {
+                _.each(protoProps.mixins, <span class="keyword">function</span>(mixin) {
+                    Brace.Mixins.applyMixin(child, mixin);
+                });
+            }
+            <span class="keyword">if</span> (child.prototype.namedEvents) {
+                Brace.Mixins.applyMixin(child, Brace.EventsMixinCreator.create(child.prototype.namedEvents));
+            }
+            <span class="keyword">if</span> (child.prototype.namedAttributes) {
+                child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
+                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
+            }
 
-        <span class="kd">var</span> <span class="nx">oldGet</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
-        <span class="nx">childProto</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">namedAttributes</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">,</span> <span class="nx">attr</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="s2">&quot;Attribute &#39;&quot;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s2">&quot;&#39; does not exist&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nx">oldGet</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-        <span class="p">};</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <p>Overrides Backbone's <code>parse</code> method to parse only namedAttributes</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">overrideParse</span><span class="p">(</span><span class="nx">ctor</span><span class="p">,</span> <span class="nx">childCtor</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">ctor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">childProto</span> <span class="o">=</span> <span class="nx">childCtor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+            <span class="keyword">if</span> (child.prototype.toJSON) {
+                child.prototype.toJSON = createToJSON(child.prototype.toJSON);
+            }
 
-        <span class="kd">var</span> <span class="nx">oldParse</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">.</span><span class="nx">parse</span><span class="p">;</span>
-        <span class="nx">childProto</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">pick</span><span class="p">(</span><span class="nx">oldParse</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">options</span><span class="p">),</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">namedAttributes</span><span class="p">));</span>
-        <span class="p">};</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">applyExtensions</span><span class="p">(</span><span class="nx">ctor</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">ctor</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
-        <span class="kd">var</span> <span class="nx">oldExtend</span> <span class="o">=</span> <span class="nx">ctor</span><span class="p">.</span><span class="nx">extend</span><span class="p">;</span>
-        <span class="nx">child</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="nx">generateMixinExtend</span><span class="p">(</span><span class="nx">oldExtend</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">applyModelExtensions</span><span class="p">(</span><span class="nx">ctor</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">applyExtensions</span><span class="p">(</span><span class="nx">ctor</span><span class="p">);</span>
-        <span class="nx">overrideSetGet</span><span class="p">(</span><span class="nx">ctor</span><span class="p">,</span> <span class="nx">child</span><span class="p">);</span>
-        <span class="nx">overrideParse</span><span class="p">(</span><span class="nx">ctor</span><span class="p">,</span> <span class="nx">child</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <p>Extend base Backbone classes</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">Brace</span><span class="p">.</span><span class="nx">Model</span> <span class="o">=</span> <span class="nx">applyModelExtensions</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">);</span>
-    <span class="nx">Brace</span><span class="p">.</span><span class="nx">Collection</span> <span class="o">=</span> <span class="nx">applyExtensions</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">);</span>
-    <span class="nx">Brace</span><span class="p">.</span><span class="nx">View</span> <span class="o">=</span> <span class="nx">applyExtensions</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">);</span>
-    <span class="nx">Brace</span><span class="p">.</span><span class="nx">Router</span> <span class="o">=</span> <span class="nx">applyExtensions</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">);</span>
+            child.extend = newExtend;
+            <span class="keyword">return</span> child;
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Overrides Backbone&#39;s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
 
-<span class="p">}());</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideSetGet</span><span class="params">(ctor, childCtor)</span> {</span>
+        <span class="keyword">var</span> proto = ctor.prototype;
+        <span class="keyword">var</span> childProto = childCtor.prototype;
 
-</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
+        <span class="keyword">var</span> oldSet = proto.set;
+        childProto.set = <span class="keyword">function</span>(key, value, options) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>TODO: has, escape, unset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> attrs,
+                attributes = <span class="keyword">this</span>.namedAttributes;
+            
+            <span class="keyword">if</span> (!attributes || key == <span class="literal">null</span>) {
+                <span class="keyword">return</span> oldSet.apply(<span class="keyword">this</span>, arguments);    
+            }
+
+            <span class="keyword">if</span> (_.isObject(key)) {
+                attrs = _.clone(key);
+                options = value;
+            } <span class="keyword">else</span> {
+                attrs = {};
+                attrs[key] = value;
+            }
+
+            <span class="keyword">for</span> (<span class="keyword">var</span> attr <span class="keyword">in</span> attrs) {
+                <span class="keyword">if</span> (!_.has(attrs, attr)) {
+                    <span class="keyword">continue</span>;
+                }
+                <span class="keyword">if</span> (!_.has(attributes, attr)) {
+                    <span class="keyword">throw</span> <span class="string">"Attribute '"</span> + attr + <span class="string">"' does not exist"</span>;
+                }
+                attrs[attr] = ensureType(attributes[attr], attrs[attr]);
+            }
+
+            <span class="keyword">return</span> oldSet.call(<span class="keyword">this</span>, attrs, options);    
+        };
+
+        <span class="keyword">var</span> oldGet = proto.get;
+        childProto.get = <span class="keyword">function</span>(attr) {
+            <span class="keyword">if</span> (<span class="keyword">this</span>.namedAttributes &amp;&amp; !_.has(<span class="keyword">this</span>.namedAttributes, attr)) {
+                <span class="keyword">throw</span> <span class="string">"Attribute '"</span> + attr + <span class="string">"' does not exist"</span>;
+            }
+            <span class="keyword">return</span> oldGet.apply(<span class="keyword">this</span>, arguments);
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideParse</span><span class="params">(ctor, childCtor)</span> {</span>
+        <span class="keyword">var</span> proto = ctor.prototype;
+        <span class="keyword">var</span> childProto = childCtor.prototype;
+
+        <span class="keyword">var</span> oldParse = proto.parse;
+        childProto.parse = <span class="keyword">function</span>(response, options) {
+            <span class="keyword">return</span> _.pick(oldParse(response, options), Object.keys(<span class="keyword">this</span>.namedAttributes));
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyExtensions</span><span class="params">(ctor)</span> {</span>
+        <span class="keyword">var</span> child = ctor.extend();
+        <span class="keyword">var</span> oldExtend = ctor.extend;
+        child.extend = generateMixinExtend(oldExtend);
+        <span class="keyword">return</span> child;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyModelExtensions</span><span class="params">(ctor)</span> {</span>
+        <span class="keyword">var</span> child = applyExtensions(ctor);
+        overrideSetGet(ctor, child);
+        overrideParse(ctor, child);
+        <span class="keyword">return</span> child;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Extend base Backbone classes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Brace.Model = applyModelExtensions(Backbone.Model);
+    Brace.Collection = applyExtensions(Backbone.Collection);
+    Brace.View = applyExtensions(Backbone.View);
+    Brace.Router = applyExtensions(Backbone.Router);
+
+}());</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
