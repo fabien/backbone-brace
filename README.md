@@ -47,8 +47,8 @@ The types of your namedAttributes are validated and coerced when namedAttributes
         namedAttributes: {
             name : "string", // validate primitives with typeof
             otherNames : [ "string" ], // validate typed array-likes
-            birthDate : Date, // validate arbitrary ctors with instanceof,
-                              // calls `new ctor(rawValue)` if necessary
+            birthDate : Date, // validate arbitrary constructors with instanceof,
+                              // calls `new constructor(rawValue)` if necessary
             children : People, // validate Backbone.Collections,
                                // coerces arrays and contained models if necessary
             attributes : Array, // validate untyped array-likes
