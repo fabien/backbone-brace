@@ -2,6 +2,7 @@
 module('Brace.Model');
 
 test("Can create BaseModel with no namedAttributes defined", function() {
+    expect(0);
     Brace.Model.extend();
 });
 
@@ -15,7 +16,7 @@ test("BaseModel adds mixin", function() {
     });
     var testModelInstance = new TestModel();
 
-    equals(testModelInstance.mixinProperty, "hi");
+    equal(testModelInstance.mixinProperty, "hi");
 });
 
 test("Mixin name clash fails violently on class declaration", function() {
@@ -87,9 +88,9 @@ test("Class initialize is called when mixin initialize is specified", function()
     });
     var testModelInstance = new TestModel();
 
-    equals(testModelInstance.myMixinHas, "beenCalled");
-    equals(testModelInstance.myMixin2Has, "beenCalled");
-    equals(testModelInstance.classInitializeHas, "beenCalled");
+    equal(testModelInstance.myMixinHas, "beenCalled");
+    equal(testModelInstance.myMixin2Has, "beenCalled");
+    equal(testModelInstance.classInitializeHas, "beenCalled");
 });
 
 test("Mixin defaults compose with class defaults", function() {
@@ -203,15 +204,15 @@ test("Attributes Mixin", function () {
         number: 412947430
     });
 
-    equals("scott", myContactModel.getName());
-    equals(412947430, myContactModel.getNumber());
+    equal("scott", myContactModel.getName());
+    equal(412947430, myContactModel.getNumber());
 
     myContactModel.setName("jonothan");
     myContactModel.setNumber(0);
 
 
-    equals("jonothan", myContactModel.getName());
-    equals(0, myContactModel.getNumber());
+    equal("jonothan", myContactModel.getName());
+    equal(0, myContactModel.getNumber());
 });
 
 

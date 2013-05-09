@@ -31,6 +31,7 @@ test("namedEvents array is not removed from model instance", function() {
 });
 
 test("Binding when no events specified succeeds", function() {
+    expect(0);
     var MaleModel = Brace.Model.extend();
 
     var hansel = new MaleModel();
@@ -38,6 +39,7 @@ test("Binding when no events specified succeeds", function() {
 });
 
 test("Triggering when no events specified succeeds", function() {
+    expect(0);
     var MaleModel = Brace.Model.extend();
 
     var hansel = new MaleModel();

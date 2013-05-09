@@ -12,9 +12,9 @@ test("Getter and setter are added to model", function() {
     ok(zoolander.setLook);
 
     zoolander.setLook("Blue Steel");
-    equals(zoolander.get("look"), "Blue Steel");
+    equal(zoolander.get("look"), "Blue Steel");
 
-    equals(zoolander.getLook(), "Blue Steel");
+    equal(zoolander.getLook(), "Blue Steel");
 });
 
 test("ID attribute is always added to namedAttributes", function() {
@@ -93,10 +93,11 @@ test("Default set and get work", function() {
 
     var zoolander = new MaleModel();
     zoolander.set("look", "Le Tigre");
-    equals(zoolander.get("look"), "Le Tigre");
+    equal(zoolander.get("look"), "Le Tigre");
 });
 
 test("Setting any attribute when no property exists succeeds", function() {
+    expect(0);
     var MaleModel = Brace.Model.extend();
 
     var hansel = new MaleModel();
@@ -104,6 +105,7 @@ test("Setting any attribute when no property exists succeeds", function() {
 });
 
 test("Getting any attribute when no property exists succeeds", function() {
+    expect(0);
     var MaleModel = Brace.Model.extend();
 
     var hansel = new MaleModel();
