@@ -352,3 +352,31 @@ test("Model parse parses only known attributes", function() {
         name: "myName"
     });
 });
+
+test("String namedAttribute is parsed as a normal string, not new String(blah)", function() {
+    var MyModel = Brace.Model.extend({
+        namedAttributes: {
+            name: String
+        }
+    });
+    var myModel = new MyModel();
+    myModel.set("name", "me");
+
+    var name = myModel.get("name");
+    equal(name, "me");
+    ok(!(name instanceof String));
+});
+
+test("Number namedAttribute is parsed as a normal number, not new Number(blah)", function() {
+    var MyModel = Brace.Model.extend({
+        namedAttributes: {
+            age: Number
+        }
+    });
+    var myModel = new MyModel();
+    myModel.set("age", 666);
+
+    var name = myModel.get("age");
+    equal(name, 666);
+    ok(!(name instanceof Number));
+});

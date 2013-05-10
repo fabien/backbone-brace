@@ -88,6 +88,13 @@
             return value;
         }
 
+        if (type === String && _.isString(value)) {
+            return value;
+        }
+        if (type === Number && _.isNumber(value)) {
+            return value;
+        }
+
         if (typeof type === 'string' || type instanceof String) {
             if (typeof value !== ""+type) {
                 throw "The typeof " + value + " is " + typeof value + " but expected it to be " + type;
