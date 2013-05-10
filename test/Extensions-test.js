@@ -140,7 +140,9 @@ test("Mixin validate is mixed in when class does not contain validate method", f
     });
 
     var testModelInstance = new TestModel();
-    testModelInstance.set({}); // cause validation
+    testModelInstance.set({}, {
+        validate: true
+    }); // cause validation
 
     ok(testModelInstance.mixin1Validated);
 });
@@ -164,7 +166,9 @@ test("Validate is composed in multiple mixins", function() {
     });
 
     var testModelInstance = new TestModel();
-    testModelInstance.set({}); // cause validation
+    testModelInstance.set({}, {
+        validate: true
+    }); // cause validation
 
     ok(testModelInstance.mixin1Validated);
     ok(testModelInstance.mixin2Validated);
@@ -183,11 +187,12 @@ test("When a mixin's validate function fails, it is returned before the original
 
     var called = false;
     var testModelInstance = new TestModel();
+    testModelInstance.on("invalid", function(ctx, error) {
+        called = true;
+        equal(error, "you suck!");
+    });
     testModelInstance.set({}, {
-        error: function(ctx, error) {
-            called = true;
-            equal(error, "you suck!");
-        }
+        validate: true
     });
 
     ok(called);
@@ -311,7 +316,11 @@ test("Order of composed validate method", function() {
         }
     });
     var failingModel = new FailingValidationModel();
-    failingModel.set('a', 'property');
+    failingModel.set({
+        a: 'property'
+    }, {
+        validate: true
+    });
     deepEqual(failingModel.callOrder, ['failedModel']);
 
     // Test that model validate called before mixin validate
@@ -322,7 +331,11 @@ test("Order of composed validate method", function() {
         }
     });
     var passingModel = new PassingValidationModel();
-    passingModel.set('a', 'property');
+    passingModel.set({
+        a: 'property'
+    }, {
+        validate: true
+    });
     deepEqual(passingModel.callOrder, ['passedModel', 'passedMixin', 'failedMixin']);
 });
 
