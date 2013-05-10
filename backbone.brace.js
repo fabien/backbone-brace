@@ -94,6 +94,9 @@
         if (type === Number && _.isNumber(value)) {
             return value;
         }
+        if (type === Boolean && _.isBoolean(value)) {
+            return value;
+        }
 
         if (typeof type === 'string' || type instanceof String) {
             if (typeof value !== ""+type) {

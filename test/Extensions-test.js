@@ -380,3 +380,17 @@ test("Number namedAttribute is parsed as a normal number, not new Number(blah)",
     equal(name, 666);
     ok(!(name instanceof Number));
 });
+
+test("Boolean namedAttribute is parsed as a normal number, not new Boolean(blah)", function() {
+    var MyModel = Brace.Model.extend({
+        namedAttributes: {
+            selected: Boolean
+        }
+    });
+    var myModel = new MyModel();
+    myModel.set("selected", true);
+
+    var name = myModel.get("selected");
+    strictEqual(name, true);
+    ok(!(name instanceof Boolean));
+});
