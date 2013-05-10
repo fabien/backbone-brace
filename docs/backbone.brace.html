@@ -187,6 +187,9 @@ It will return a new array consisting of the result of each recursive call.</li>
         <span class="keyword">if</span> (type === Number &amp;&amp; _.isNumber(value)) {
             <span class="keyword">return</span> value;
         }
+        <span class="keyword">if</span> (type === Boolean &amp;&amp; _.isBoolean(value)) {
+            <span class="keyword">return</span> value;
+        }
 
         <span class="keyword">if</span> (<span class="keyword">typeof</span> type === <span class="string">'string'</span> || type <span class="keyword">instanceof</span> String) {
             <span class="keyword">if</span> (<span class="keyword">typeof</span> value !== <span class="string">""</span>+type) {
