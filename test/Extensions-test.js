@@ -394,3 +394,15 @@ test("Boolean namedAttribute is parsed as a normal number, not new Boolean(blah)
     strictEqual(name, true);
     ok(!(name instanceof Boolean));
 });
+
+test("Typed namedAttribute accepts null", function() {
+    var MyModel = Brace.Model.extend({
+        namedAttributes: {
+            age: Number
+        }
+    });
+    var myModel = new MyModel({"age": null});
+
+    var age = myModel.get("age");
+    strictEqual(age, null);
+});
