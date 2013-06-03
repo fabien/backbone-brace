@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="comment">/*! 
- *  Backbone Brace - 2013-05-13 
+ *  Backbone Brace - 2013-06-03 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
@@ -91,14 +91,14 @@ if there was no previous version loaded).</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="comment">/**
      * Returns the current copy of Brace and sets the global Brace object to the
-     * previous version (or undefined if there was no previous version loaded). 
+     * previous version (or undefined if there was no previous version loaded).
      *
      * @returns Object A reference to this version of Brace.
      */</span>
     Brace.noConflict = <span class="keyword">function</span>() {
         root.Brace = previousBrace;
         <span class="keyword">return</span> <span class="keyword">this</span>;
-    };    
+    };
 
     <span class="keyword">var</span> _ = root._;
     <span class="keyword">if</span> (!_ &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)){ _ = require(<span class="string">'underscore'</span>); }
@@ -161,7 +161,7 @@ If type conversion is necessary, this function will generate a new object using
 <li>an Array: this function will be recursively called for each element in value using
 type&#39;s first element as the type. E.g.,<pre><code>  `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`</code></pre>
 It will return a new array consisting of the result of each recursive call.</li>
-<li>a Backbone.Collection constructor: this function may be recursively called for each element in 
+<li>a Backbone.Collection constructor: this function may be recursively called for each element in
   value using type.model as the type. E.g.,<pre><code>  `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
   recursively call `ensureType(Number, 1)`</code></pre>
   It will return a Backbone.Collection via new type({array of recursive results})</li>
@@ -734,31 +734,28 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
+              <p>Creates a mixin of on, off, trigger and once methods for each item in the given list of events.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>        create: <span class="keyword">function</span>(events) {
             <span class="keyword">var</span> eventMethods = {};
-            <span class="keyword">var</span> createEvent = <span class="keyword">function</span>(eventName) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>TODO: off</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="string">"on"</span>, eventName);
+            <span class="keyword">var</span> createEvent = <span class="keyword">function</span>(eventName) {
+                <span class="keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="string">"on"</span>, eventName);
                 eventMethods[binder] = <span class="keyword">function</span>() {
                     <span class="keyword">return</span> <span class="keyword">this</span>.on.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
                 };
+
+                <span class="keyword">var</span> unbinder = Brace.Mixins.createMethodName(<span class="string">"off"</span>, eventName);
+                eventMethods[unbinder] = <span class="keyword">function</span>() {
+                    <span class="keyword">return</span> <span class="keyword">this</span>.off.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
+                };
+
+                <span class="keyword">var</span> once = Brace.Mixins.createMethodName(<span class="string">"once"</span>, eventName);
+                eventMethods[once] = <span class="keyword">function</span>() {
+                    <span class="keyword">return</span> <span class="keyword">this</span>.once.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
+                };
+
                 <span class="keyword">var</span> trigger = Brace.Mixins.createMethodName(<span class="string">"trigger"</span>, eventName);
                 eventMethods[trigger] = <span class="keyword">function</span>() {
                     <span class="keyword">return</span> <span class="keyword">this</span>.trigger.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
@@ -773,11 +770,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Generates an <code>extend</code> method that overrides Backbone&#39;s default <code>extend</code>. The new extend calls Backbone&#39;s <code>extend</code>, then:</p>
 <ul>
@@ -796,11 +793,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Remove <code>mixins</code> - we don&#39;t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
 
@@ -845,11 +842,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Overrides Backbone&#39;s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
 
@@ -865,11 +862,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>TODO: has, escape, unset</p>
 
@@ -877,9 +874,9 @@ A getter and setter for <code>id</code> is always generated.</p>
             
             <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> attrs,
                 attributes = <span class="keyword">this</span>.namedAttributes;
-            
+
             <span class="keyword">if</span> (!attributes || key == <span class="literal">null</span>) {
-                <span class="keyword">return</span> oldSet.apply(<span class="keyword">this</span>, arguments);    
+                <span class="keyword">return</span> oldSet.apply(<span class="keyword">this</span>, arguments);
             }
 
             <span class="keyword">if</span> (_.isObject(key)) {
@@ -900,7 +897,7 @@ A getter and setter for <code>id</code> is always generated.</p>
                 attrs[attr] = ensureType(attributes[attr], attrs[attr]);
             }
 
-            <span class="keyword">return</span> oldSet.call(<span class="keyword">this</span>, attrs, options);    
+            <span class="keyword">return</span> oldSet.call(<span class="keyword">this</span>, attrs, options);
         };
 
         <span class="keyword">var</span> oldGet = proto.get;
@@ -915,11 +912,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
 
@@ -938,11 +935,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
 
@@ -958,11 +955,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
 
@@ -978,11 +975,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Extend base Backbone classes</p>
 

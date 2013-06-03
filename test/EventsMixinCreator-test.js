@@ -1,7 +1,7 @@
 
 module("Brace.EventsMixinCreator");
 
-test("On and trigger are added to model", function() {
+test("On, off, once and trigger are added to model", function() {
     var MaleModel = Brace.Model.extend({
         namedEvents: ["think"]
     });
@@ -9,6 +9,8 @@ test("On and trigger are added to model", function() {
     var zoolander = new MaleModel();
 
     ok(zoolander.onThink);
+    ok(zoolander.offThink);
+    ok(zoolander.onceThink);
     ok(zoolander.triggerThink);
 
     var triggered = false;
@@ -56,6 +58,8 @@ test("Mixin can apply events to model with no events", function() {
     var myModel = new MyModel();
     deepEqual(myModel.namedEvents, ["someEvent"]);
     ok(myModel.onSomeEvent);
+    ok(myModel.offSomeEvent);
+    ok(myModel.onceSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
 
@@ -70,8 +74,12 @@ test("Mixin can apply events to model with some events", function() {
     var myModel = new MyModel();
     deepEqual(myModel.namedEvents, ["someOtherEvent", "someEvent"]);
     ok(myModel.onSomeOtherEvent);
+    ok(myModel.offSomeOtherEvent);
+    ok(myModel.onceSomeOtherEvent);
     ok(myModel.triggerSomeOtherEvent);
     ok(myModel.onSomeEvent);
+    ok(myModel.offSomeEvent);
+    ok(myModel.onceSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
 
@@ -93,8 +101,12 @@ test("Children inherit their parents namedEvents", function() {
 
     deepEqual(actual, expected);
     ok(myModel.onSomeOtherEvent);
+    ok(myModel.offSomeOtherEvent);
+    ok(myModel.onceSomeOtherEvent);
     ok(myModel.triggerSomeOtherEvent);
     ok(myModel.onSomeEvent);
+    ok(myModel.offSomeEvent);
+    ok(myModel.onceSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
 
@@ -117,8 +129,12 @@ test("Children inherit their ancestors namedEvents", function() {
 
     deepEqual(actual, expected);
     ok(myModel.onSomeOtherEvent);
+    ok(myModel.offSomeOtherEvent);
+    ok(myModel.onceSomeOtherEvent);
     ok(myModel.triggerSomeOtherEvent);
     ok(myModel.onSomeEvent);
+    ok(myModel.offSomeEvent);
+    ok(myModel.onceSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
 
@@ -143,10 +159,16 @@ test("Children inherit their parents and ancestors namedEvents", function() {
 
     deepEqual(actual, expected);
     ok(myModel.onSomeOtherEvent);
+    ok(myModel.offSomeOtherEvent);
+    ok(myModel.onceSomeOtherEvent);
     ok(myModel.triggerSomeOtherEvent);
     ok(myModel.onSomeKindOfEvent);
+    ok(myModel.offSomeKindOfEvent);
+    ok(myModel.onceSomeKindOfEvent);
     ok(myModel.triggerSomeKindOfEvent);
     ok(myModel.onSomeEvent);
+    ok(myModel.offSomeEvent);
+    ok(myModel.onceSomeEvent);
     ok(myModel.triggerSomeEvent);
 });
 
