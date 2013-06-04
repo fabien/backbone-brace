@@ -1,5 +1,5 @@
 /*! 
- *  Backbone Brace - 2013-06-03 
+ *  Backbone Brace - 2013-06-04 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */ 
@@ -23,14 +23,14 @@
     // if there was no previous version loaded).
     /**
      * Returns the current copy of Brace and sets the global Brace object to the
-     * previous version (or undefined if there was no previous version loaded).
+     * previous version (or undefined if there was no previous version loaded). 
      *
      * @returns Object A reference to this version of Brace.
      */
     Brace.noConflict = function() {
         root.Brace = previousBrace;
         return this;
-    };
+    };    
 
     var _ = root._;
     if (!_ && (typeof require !== 'undefined')){ _ = require('underscore'); }
@@ -76,7 +76,7 @@
     //   type's first element as the type. E.g.,
     //         `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`
     //   It will return a new array consisting of the result of each recursive call.
-    // * a Backbone.Collection constructor: this function may be recursively called for each element in
+    // * a Backbone.Collection constructor: this function may be recursively called for each element in 
     //     value using type.model as the type. E.g.,
     //         `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
     //         recursively call `ensureType(Number, 1)`
@@ -363,26 +363,16 @@
 
     // ## Brace.EventsMixinCreator ##
     Brace.EventsMixinCreator = {
- 
-        // Creates a mixin of on, off, trigger and once methods for each item in the given list of events.
+
+        // Creates a mixin of on and trigger methods for each item in the given list of events.
         create: function(events) {
             var eventMethods = {};
             var createEvent = function(eventName) {
+                // TODO: off
                 var binder = Brace.Mixins.createMethodName("on", eventName);
                 eventMethods[binder] = function() {
                     return this.on.apply(this, [eventName].concat(_.toArray(arguments)));
                 };
-
-                var unbinder = Brace.Mixins.createMethodName("off", eventName);
-                eventMethods[unbinder] = function() {
-                    return this.off.apply(this, [eventName].concat(_.toArray(arguments)));
-                };
-
-                var once = Brace.Mixins.createMethodName("once", eventName);
-                eventMethods[once] = function() {
-                    return this.once.apply(this, [eventName].concat(_.toArray(arguments)));
-                };
-
                 var trigger = Brace.Mixins.createMethodName("trigger", eventName);
                 eventMethods[trigger] = function() {
                     return this.trigger.apply(this, [eventName].concat(_.toArray(arguments)));
@@ -450,9 +440,9 @@
             // TODO: has, escape, unset
             var attrs,
                 attributes = this.namedAttributes;
-
+            
             if (!attributes || key == null) {
-                return oldSet.apply(this, arguments);
+                return oldSet.apply(this, arguments);    
             }
 
             if (_.isObject(key)) {
@@ -473,7 +463,7 @@
                 attrs[attr] = ensureType(attributes[attr], attrs[attr]);
             }
 
-            return oldSet.call(this, attrs, options);
+            return oldSet.call(this, attrs, options);    
         };
 
         var oldGet = proto.get;
@@ -518,5 +508,13 @@
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
+    var Evented = function() {
+        this.initialize.apply(this, arguments);
+    };
+    _.extend(Evented.prototype, Backbone.Events, {
+        initialize: function() {}
+    });
+    Evented.extend = Backbone.Model.extend;
+    Brace.Evented = applyExtensions(Evented);
 
 }());

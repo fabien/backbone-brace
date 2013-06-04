@@ -513,5 +513,13 @@
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
+    var Evented = function() {
+        this.initialize.apply(this, arguments);
+    };
+    _.extend(Evented.prototype, Backbone.Events, {
+        initialize: function() {}
+    });
+    Evented.extend = Backbone.Model.extend;
+    Brace.Evented = applyExtensions(Evented);
 
 }());
