@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="comment">/*! 
- *  Backbone Brace - 2013-05-13 
+ *  Backbone Brace - 2013-06-04 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
@@ -992,6 +992,14 @@ A getter and setter for <code>id</code> is always generated.</p>
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
+    <span class="keyword">var</span> Evented = <span class="keyword">function</span>() {
+        <span class="keyword">this</span>.initialize.apply(<span class="keyword">this</span>, arguments);
+    };
+    _.extend(Evented.prototype, Backbone.Events, {
+        initialize: <span class="keyword">function</span>() {}
+    });
+    Evented.extend = Backbone.Model.extend;
+    Brace.Evented = applyExtensions(Evented);
 
 }());</pre></div></div>
             

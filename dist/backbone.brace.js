@@ -1,5 +1,5 @@
 /*! 
- *  Backbone Brace - 2013-05-13 
+ *  Backbone Brace - 2013-06-04 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */ 
@@ -508,5 +508,13 @@
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
+    var Evented = function() {
+        this.initialize.apply(this, arguments);
+    };
+    _.extend(Evented.prototype, Backbone.Events, {
+        initialize: function() {}
+    });
+    Evented.extend = Backbone.Model.extend;
+    Brace.Evented = applyExtensions(Evented);
 
 }());

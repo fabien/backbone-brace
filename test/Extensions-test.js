@@ -406,3 +406,32 @@ test("Typed namedAttribute accepts null", function() {
     var age = myModel.get("age");
     strictEqual(age, null);
 });
+
+test("BaseEvented on / trigger", function() {
+    var MyEvented = Brace.Evented.extend({});
+    var myEvented = new MyEvented();
+    var called = false;
+    myEvented.on("blah", function() { called = true; });
+    myEvented.trigger("blah");
+    ok(called);
+});
+
+test("BaseEvented on / trigger with namedEvent", function() {
+    var MyEvented = Brace.Evented.extend({
+        namedEvents: ["blah"]
+    });
+    var myEvented = new MyEvented();
+    var called = false;
+    myEvented.onBlah(function() { called = true; });
+    myEvented.triggerBlah();
+    ok(called);
+});
+
+test("BaseEvented initialize", function() {
+  var called = false;
+  var MyEvented = Brace.Evented.extend({
+    initialize: function() { called = true; }
+  });
+  new MyEvented();
+  ok(called);
+});
