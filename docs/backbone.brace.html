@@ -931,7 +931,7 @@ A getter and setter for <code>id</code> is always generated.</p>
 
         <span class="keyword">var</span> oldParse = proto.parse;
         childProto.parse = <span class="keyword">function</span>(response, options) {
-            <span class="keyword">return</span> _.pick(oldParse(response, options), Object.keys(<span class="keyword">this</span>.namedAttributes));
+            <span class="keyword">return</span> _.pick(oldParse(response, options), _.keys(<span class="keyword">this</span>.namedAttributes));
         };
     }</pre></div></div>
             

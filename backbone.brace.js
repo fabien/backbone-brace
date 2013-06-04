@@ -477,7 +477,7 @@
 
         var oldParse = proto.parse;
         childProto.parse = function(response, options) {
-            return _.pick(oldParse(response, options), Object.keys(this.namedAttributes));
+            return _.pick(oldParse(response, options), _.keys(this.namedAttributes));
         };
     }
 
