@@ -1,4 +1,3 @@
-
 module("Brace.EventsMixinCreator");
 
 test("On and trigger are added to model", function() {
