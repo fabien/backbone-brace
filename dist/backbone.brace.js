@@ -352,8 +352,10 @@
             //    * alias the ID's getter/setter to that attribute's getter/setter
             if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined') {
                 attributes.id = attributes[idAttribute];
-                methods.getId = function() { return this[Brace.Mixins.createMethodName("get", idAttribute)](); };
-                methods.setId = function(val, options) { return this[Brace.Mixins.createMethodName("set", idAttribute)](val, options); };
+                var idGetter = Brace.Mixins.createMethodName("get", idAttribute);
+                var idSetter = Brace.Mixins.createMethodName("set", idAttribute);
+                methods.getId = function() { return this[idGetter](); };
+                methods.setId = function(val, options) { return this[idSetter](val, options); };
             }
             
             return methods;

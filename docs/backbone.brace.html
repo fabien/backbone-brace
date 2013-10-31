@@ -714,8 +714,10 @@ A getter and setter for <code>id</code> is always generated.</p>
             
             <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> idAttribute === <span class="string">'string'</span> &amp;&amp; <span class="keyword">typeof</span> attributes[idAttribute] !== <span class="string">'undefined'</span>) {
                 attributes.id = attributes[idAttribute];
-                methods.getId = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[Brace.Mixins.createMethodName(<span class="string">"get"</span>, idAttribute)](); };
-                methods.setId = <span class="function"><span class="keyword">function</span><span class="params">(val, options)</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[Brace.Mixins.createMethodName(<span class="string">"set"</span>, idAttribute)](val, options); };
+                <span class="keyword">var</span> idGetter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, idAttribute);
+                <span class="keyword">var</span> idSetter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, idAttribute);
+                methods.getId = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idGetter](); };
+                methods.setId = <span class="function"><span class="keyword">function</span><span class="params">(val, options)</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idSetter](val, options); };
             }
             
             <span class="keyword">return</span> methods;
