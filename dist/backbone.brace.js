@@ -1,5 +1,5 @@
 /*! 
- *  Backbone Brace - 2013-06-04 
+ *  Backbone Brace - 2013-10-31 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */ 
@@ -323,7 +323,7 @@
 
         // Creates a mixin of getter and setter methods for each item in the given attribute list.
         // A getter and setter for `id` is always generated.
-        create: function(attributes) {
+        create: function(attributes, idAttribute) {
             var methods = {};
 
             if (!attributes) {
@@ -346,6 +346,18 @@
                 };
             });
 
+            // If an idAttribute is specified
+            //
+            //    * the ID is going to be of the same type as that attribute
+            //    * alias the ID's getter/setter to that attribute's getter/setter
+            if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined') {
+                attributes.id = attributes[idAttribute];
+                var idGetter = Brace.Mixins.createMethodName("get", idAttribute);
+                var idSetter = Brace.Mixins.createMethodName("set", idAttribute);
+                methods.getId = function() { return this[idGetter](); };
+                methods.setId = function(val, options) { return this[idSetter](val, options); };
+            }
+            
             return methods;
         },
         /**
@@ -418,7 +430,7 @@
             }
             if (child.prototype.namedAttributes) {
                 child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
-                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
+                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes, child.prototype.idAttribute));
             }
 
             if (child.prototype.toJSON) {

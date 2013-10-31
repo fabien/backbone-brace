@@ -435,3 +435,17 @@ test("BaseEvented initialize", function() {
   new MyEvented();
   ok(called);
 });
+
+test("idAttribute aliasing", function(){
+    var MaleModel = Brace.Model.extend({
+        namedAttributes: ["look", "canTurnLeft"],
+        idAttribute: "look"
+    });
+
+    var zoolander = new MaleModel({ look: 'Blue Steel', canTurnLeft: false });
+    equal(zoolander.getId(), zoolander.getLook(), 'ID is aliased to the named attribute');
+
+    zoolander.setLook('Magnum');
+    equal(zoolander.getId(), 'Magnum', 'ID is updated when named attribute is updated');
+
+});

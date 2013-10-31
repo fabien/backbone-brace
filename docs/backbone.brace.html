@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="comment">/*! 
- *  Backbone Brace - 2013-06-04 
+ *  Backbone Brace - 2013-10-31 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
@@ -95,7 +95,7 @@ if there was no previous version loaded).</p>
      *
      * @returns Object A reference to this version of Brace.
      */</span>
-    Brace.noConflict = <span class="keyword">function</span>() {
+    Brace.noConflict = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
         root.Brace = previousBrace;
         <span class="keyword">return</span> <span class="keyword">this</span>;
     };    
@@ -133,7 +133,7 @@ Given anything else, this function will return the object untouched.</p>
      */</span>
     <span class="function"><span class="keyword">function</span> <span class="title">asObject</span><span class="params">(maybeArray)</span> {</span>
         <span class="keyword">if</span> (_.isArray(maybeArray)) {
-            <span class="keyword">return</span> _.reduce(maybeArray, <span class="keyword">function</span>(obj, prop) {
+            <span class="keyword">return</span> _.reduce(maybeArray, <span class="function"><span class="keyword">function</span><span class="params">(obj, prop)</span> {</span>
                 obj[prop] =  <span class="literal">null</span>;
                 <span class="keyword">return</span> obj;
             }, {});
@@ -332,7 +332,7 @@ Where the types conflict, throw an error.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">nonConflictedTypes</span><span class="params">(obj, refObj)</span> {</span>
         <span class="keyword">var</span> newObj = {};
-        _.each(obj, <span class="keyword">function</span>(val, key) {
+        _.each(obj, <span class="function"><span class="keyword">function</span><span class="params">(val, key)</span> {</span>
             <span class="keyword">if</span> (!refObj[key] || assumes(val, refObj[key])) {
                 newObj[key] = val;
             } <span class="keyword">else</span> <span class="keyword">if</span> (!val || assumes(refObj[key], val)) {
@@ -399,11 +399,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
      */</span>
     <span class="function"><span class="keyword">function</span> <span class="title">nestedToJSON</span><span class="params">(object)</span> {</span>
         <span class="keyword">if</span> (_.isObject(object)) {
-            <span class="keyword">return</span> _.reduce(object, <span class="keyword">function</span>(memo, value, key) {
+            <span class="keyword">return</span> _.reduce(object, <span class="function"><span class="keyword">function</span><span class="params">(memo, value, key)</span> {</span>
                 <span class="keyword">if</span> (value &amp;&amp; _.isFunction(value.toJSON)) {
                     memo[key] = value.toJSON();
                 } <span class="keyword">else</span> <span class="keyword">if</span> (_.isArray(value)) {
-                    memo[key] = _.map(value, <span class="keyword">function</span>(el) {
+                    memo[key] = _.map(value, <span class="function"><span class="keyword">function</span><span class="params">(el)</span> {</span>
                         <span class="keyword">if</span> (el &amp;&amp; _.isFunction(el.toJSON)) {
                             <span class="keyword">return</span> el.toJSON();
                         } <span class="keyword">else</span> {
@@ -454,7 +454,7 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        createMethodName: <span class="keyword">function</span>(prefix, suffix) {
+            <div class="content"><div class='highlight'><pre>        createMethodName: <span class="function"><span class="keyword">function</span><span class="params">(prefix, suffix)</span> {</span>
             <span class="keyword">return</span> prefix + suffix.charAt(<span class="number">0</span>).toUpperCase() + suffix.substr(<span class="number">1</span>);
         },</pre></div></div>
             
@@ -471,8 +471,8 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        applyMixin: <span class="keyword">function</span>(ctor, mixin) {
-            _.forEach(_.keys(mixin), <span class="keyword">function</span>(key) {
+            <div class="content"><div class='highlight'><pre>        applyMixin: <span class="function"><span class="keyword">function</span><span class="params">(ctor, mixin)</span> {</span>
+            _.forEach(_.keys(mixin), <span class="function"><span class="keyword">function</span><span class="params">(key)</span> {</span>
                 <span class="keyword">var</span> proto = ctor.prototype;</pre></div></div>
             
         </li>
@@ -490,7 +490,7 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
             
             <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"initialize"</span> === key) {
                     <span class="keyword">var</span> oldInitialize = proto.initialize;
-                    proto.initialize = <span class="keyword">function</span>() {
+                    proto.initialize = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
                         <span class="keyword">if</span> (oldInitialize) {
                             oldInitialize.apply(<span class="keyword">this</span>, arguments);
                         }
@@ -514,7 +514,7 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
             
             <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"validate"</span> === key) {
                     <span class="keyword">var</span> oldValidate = proto.validate;
-                    proto.validate = <span class="keyword">function</span>() {
+                    proto.validate = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
                         <span class="keyword">if</span> (oldValidate) {
                             <span class="keyword">var</span> errors = oldValidate.apply(<span class="keyword">this</span>, arguments);
                             <span class="keyword">if</span> (errors) {
@@ -659,7 +659,7 @@ A getter and setter for <code>id</code> is always generated.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        create: <span class="keyword">function</span>(attributes) {
+            <div class="content"><div class='highlight'><pre>        create: <span class="function"><span class="keyword">function</span><span class="params">(attributes, idAttribute)</span> {</span>
             <span class="keyword">var</span> methods = {};
 
             <span class="keyword">if</span> (!attributes) {
@@ -693,8 +693,33 @@ A getter and setter for <code>id</code> is always generated.</p>
                 methods[getter] = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
                     <span class="keyword">return</span> <span class="keyword">this</span>.get(attrName);
                 };
-            });
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>If an idAttribute is specified</p>
+<ul>
+<li>the ID is going to be of the same type as that attribute</li>
+<li>alias the ID&#39;s getter/setter to that attribute&#39;s getter/setter</li>
+</ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> idAttribute === <span class="string">'string'</span> &amp;&amp; <span class="keyword">typeof</span> attributes[idAttribute] !== <span class="string">'undefined'</span>) {
+                attributes.id = attributes[idAttribute];
+                <span class="keyword">var</span> idGetter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, idAttribute);
+                <span class="keyword">var</span> idSetter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, idAttribute);
+                methods.getId = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idGetter](); };
+                methods.setId = <span class="function"><span class="keyword">function</span><span class="params">(val, options)</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idSetter](val, options); };
+            }
+            
             <span class="keyword">return</span> methods;
         },
         <span class="comment">/**
@@ -713,11 +738,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <h2>Brace.EventsMixinCreator</h2>
 
@@ -728,39 +753,39 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        create: <span class="keyword">function</span>(events) {
-            <span class="keyword">var</span> eventMethods = {};
-            <span class="keyword">var</span> createEvent = <span class="keyword">function</span>(eventName) {</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
+              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        create: <span class="function"><span class="keyword">function</span><span class="params">(events)</span> {</span>
+            <span class="keyword">var</span> eventMethods = {};
+            <span class="keyword">var</span> createEvent = <span class="function"><span class="keyword">function</span><span class="params">(eventName)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
               <p>TODO: off</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="string">"on"</span>, eventName);
-                eventMethods[binder] = <span class="keyword">function</span>() {
+                eventMethods[binder] = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
                     <span class="keyword">return</span> <span class="keyword">this</span>.on.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
                 };
                 <span class="keyword">var</span> trigger = Brace.Mixins.createMethodName(<span class="string">"trigger"</span>, eventName);
-                eventMethods[trigger] = <span class="keyword">function</span>() {
+                eventMethods[trigger] = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
                     <span class="keyword">return</span> <span class="keyword">this</span>.trigger.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
                 };
             };
@@ -773,11 +798,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Generates an <code>extend</code> method that overrides Backbone&#39;s default <code>extend</code>. The new extend calls Backbone&#39;s <code>extend</code>, then:</p>
 <ul>
@@ -796,11 +821,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Remove <code>mixins</code> - we don&#39;t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
 
@@ -821,7 +846,7 @@ A getter and setter for <code>id</code> is always generated.</p>
             }
 
             <span class="keyword">if</span> (mixins) {
-                _.each(protoProps.mixins, <span class="keyword">function</span>(mixin) {
+                _.each(protoProps.mixins, <span class="function"><span class="keyword">function</span><span class="params">(mixin)</span> {</span>
                     Brace.Mixins.applyMixin(child, mixin);
                 });
             }
@@ -830,7 +855,7 @@ A getter and setter for <code>id</code> is always generated.</p>
             }
             <span class="keyword">if</span> (child.prototype.namedAttributes) {
                 child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
-                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes));
+                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes, child.prototype.idAttribute));
             }
 
             <span class="keyword">if</span> (child.prototype.toJSON) {
@@ -845,11 +870,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Overrides Backbone&#39;s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
 
@@ -860,16 +885,16 @@ A getter and setter for <code>id</code> is always generated.</p>
         <span class="keyword">var</span> childProto = childCtor.prototype;
 
         <span class="keyword">var</span> oldSet = proto.set;
-        childProto.set = <span class="keyword">function</span>(key, value, options) {</pre></div></div>
+        childProto.set = <span class="function"><span class="keyword">function</span><span class="params">(key, value, options)</span> {</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-34">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>TODO: has, escape, unset</p>
 
@@ -904,34 +929,11 @@ A getter and setter for <code>id</code> is always generated.</p>
         };
 
         <span class="keyword">var</span> oldGet = proto.get;
-        childProto.get = <span class="keyword">function</span>(attr) {
+        childProto.get = <span class="function"><span class="keyword">function</span><span class="params">(attr)</span> {</span>
             <span class="keyword">if</span> (<span class="keyword">this</span>.namedAttributes &amp;&amp; !_.has(<span class="keyword">this</span>.namedAttributes, attr)) {
                 <span class="keyword">throw</span> <span class="string">"Attribute '"</span> + attr + <span class="string">"' does not exist"</span>;
             }
             <span class="keyword">return</span> oldGet.apply(<span class="keyword">this</span>, arguments);
-        };
-    }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideParse</span><span class="params">(ctor, childCtor)</span> {</span>
-        <span class="keyword">var</span> proto = ctor.prototype;
-        <span class="keyword">var</span> childProto = childCtor.prototype;
-
-        <span class="keyword">var</span> oldParse = proto.parse;
-        childProto.parse = <span class="keyword">function</span>(response, options) {
-            <span class="keyword">return</span> _.pick(oldParse(response, options), _.keys(<span class="keyword">this</span>.namedAttributes));
         };
     }</pre></div></div>
             
@@ -944,15 +946,18 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+              <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyExtensions</span><span class="params">(ctor)</span> {</span>
-        <span class="keyword">var</span> child = ctor.extend();
-        <span class="keyword">var</span> oldExtend = ctor.extend;
-        child.extend = generateMixinExtend(oldExtend);
-        <span class="keyword">return</span> child;
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideParse</span><span class="params">(ctor, childCtor)</span> {</span>
+        <span class="keyword">var</span> proto = ctor.prototype;
+        <span class="keyword">var</span> childProto = childCtor.prototype;
+
+        <span class="keyword">var</span> oldParse = proto.parse;
+        childProto.parse = <span class="function"><span class="keyword">function</span><span class="params">(response, options)</span> {</span>
+            <span class="keyword">return</span> _.pick(oldParse(response, options), _.keys(<span class="keyword">this</span>.namedAttributes));
+        };
     }</pre></div></div>
             
         </li>
@@ -968,10 +973,10 @@ A getter and setter for <code>id</code> is always generated.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyModelExtensions</span><span class="params">(ctor)</span> {</span>
-        <span class="keyword">var</span> child = applyExtensions(ctor);
-        overrideSetGet(ctor, child);
-        overrideParse(ctor, child);
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyExtensions</span><span class="params">(ctor)</span> {</span>
+        <span class="keyword">var</span> child = ctor.extend();
+        <span class="keyword">var</span> oldExtend = ctor.extend;
+        child.extend = generateMixinExtend(oldExtend);
         <span class="keyword">return</span> child;
     }</pre></div></div>
             
@@ -984,6 +989,26 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
+              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyModelExtensions</span><span class="params">(ctor)</span> {</span>
+        <span class="keyword">var</span> child = applyExtensions(ctor);
+        overrideSetGet(ctor, child);
+        overrideParse(ctor, child);
+        <span class="keyword">return</span> child;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
               <p>Extend base Backbone classes</p>
 
             </div>
@@ -992,11 +1017,11 @@ A getter and setter for <code>id</code> is always generated.</p>
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
-    <span class="keyword">var</span> Evented = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> Evented = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
         <span class="keyword">this</span>.initialize.apply(<span class="keyword">this</span>, arguments);
     };
     _.extend(Evented.prototype, Backbone.Events, {
-        initialize: <span class="keyword">function</span>() {}
+        initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>}
     });
     Evented.extend = Backbone.Model.extend;
     Brace.Evented = applyExtensions(Evented);
