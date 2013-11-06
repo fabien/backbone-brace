@@ -345,7 +345,8 @@
             //
             //    * the ID is going to be of the same type as that attribute
             //    * alias the ID's getter/setter to that attribute's getter/setter
-            if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined') {
+            //    * Don't alias if the idAttribute is set to 'id'
+            if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined' && idAttribute !== 'id') {
                 attributes.id = attributes[idAttribute];
                 var idGetter = Brace.Mixins.createMethodName("get", idAttribute);
                 var idSetter = Brace.Mixins.createMethodName("set", idAttribute);
