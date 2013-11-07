@@ -1,5 +1,5 @@
 /*! 
- *  Backbone Brace - 2013-10-31 
+ *  Backbone Brace - 2013-11-07 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */ 
@@ -350,7 +350,8 @@
             //
             //    * the ID is going to be of the same type as that attribute
             //    * alias the ID's getter/setter to that attribute's getter/setter
-            if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined') {
+            //    * Don't alias if the idAttribute is set to 'id'
+            if (typeof idAttribute === 'string' && typeof attributes[idAttribute] !== 'undefined' && idAttribute !== 'id') {
                 attributes.id = attributes[idAttribute];
                 var idGetter = Brace.Mixins.createMethodName("get", idAttribute);
                 var idSetter = Brace.Mixins.createMethodName("set", idAttribute);

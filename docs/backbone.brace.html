@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="comment">/*! 
- *  Backbone Brace - 2013-10-31 
+ *  Backbone Brace - 2013-11-07 
  *  Copyright 2013 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
@@ -708,11 +708,12 @@ A getter and setter for <code>id</code> is always generated.</p>
 <ul>
 <li>the ID is going to be of the same type as that attribute</li>
 <li>alias the ID&#39;s getter/setter to that attribute&#39;s getter/setter</li>
+<li>Don&#39;t alias if the idAttribute is set to &#39;id&#39;</li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> idAttribute === <span class="string">'string'</span> &amp;&amp; <span class="keyword">typeof</span> attributes[idAttribute] !== <span class="string">'undefined'</span>) {
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> idAttribute === <span class="string">'string'</span> &amp;&amp; <span class="keyword">typeof</span> attributes[idAttribute] !== <span class="string">'undefined'</span> &amp;&amp; idAttribute !== <span class="string">'id'</span>) {
                 attributes.id = attributes[idAttribute];
                 <span class="keyword">var</span> idGetter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, idAttribute);
                 <span class="keyword">var</span> idSetter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, idAttribute);
