@@ -448,12 +448,15 @@ test("idAttribute aliasing", function(){
     zoolander.setLook('Magnum');
     equal(zoolander.getId(), 'Magnum', 'ID is updated when named attribute is updated');
 
-    var MogatuModel = Brace.Model.extend({
-        namedAttributes: ['id', 'style'],
+    var MugatuModel = Brace.Model.extend({
+        namedAttributes: {
+            'id': 'string',
+            'style': 'string'
+        },
         idAttribute: 'id'
     });
 
-    var derek = new MogatuModel({ style: 'Derelicte', id: 'Derek Zoolander' });
-    equal(derek.getId(), 'Derek Zoolander', 'setting the idAttribute to "id" does not cause an overflow when accessing the property');
+    var derek = new MugatuModel({ style: 'Derelicte', id: 'Derek Zoolander' });
+    equal(derek.getId(), 'Derek Zoolander', 'accessing the ID when it is a namedAttribute should not cause an overflow');
 
 });
