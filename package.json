@@ -18,7 +18,7 @@
     "docco": "~0.6.2"
   },
   "scripts": {
-    "test": "grunt qunit"
+    "test": "grunt connect qunit"
   },
   "repository": {
     "type": "git",

@@ -23,7 +23,8 @@ module.exports = function(grunt) {
             all: {
                 options: {
                     urls: [
-                        'http://localhost:8000/test/test.html'
+                        'http://localhost:8000/test/test.html',
+                        'http://localhost:8000/test/noConflictTest.html'
                     ]
                 }
             }
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
 
         watch: {
             files: ['test/*.js', 'backbone.brace.js'],
-            tasks: ['qunit', 'lintconcat', 'docco']
+            tasks: ['connect', 'qunit', 'lintconcat', 'docco']
         },
 
         jshint: {
