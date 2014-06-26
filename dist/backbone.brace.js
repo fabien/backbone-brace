@@ -1,42 +1,49 @@
 /*! 
- *  Backbone Brace - 2013-11-07 
- *  Copyright 2013 Atlassian Software Systems Pty Ltd
+ *  Backbone Brace - 2014-06-26 
+ *  Copyright 2014 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */ 
-(function () {
-
-    // node / browser imports, copied from here
-    var root = this;
-
+(function (root, factory) {
+    // Global to export
+    var rootExport = 'Brace';
     // Store a reference to any other copies of Brace include (if any)
-    var previousBrace = root.Brace;
+    var previousBrace = root[rootExport];
 
-    var Brace;
-    if (typeof exports !== 'undefined') {
-        Brace = exports;
-    } else {
-        Brace = root.Brace = {};
-    }
-
-    // noConflict will return this version of Brace and reset the global 
+    // noConflict will return this version of Brace and reset the global
     // Brace variable to the previously loaded version of Brace (or undefined
     // if there was no previous version loaded).
     /**
      * Returns the current copy of Brace and sets the global Brace object to the
-     * previous version (or undefined if there was no previous version loaded). 
+     * previous version (or undefined if there was no previous version loaded).
      *
      * @returns Object A reference to this version of Brace.
      */
-    Brace.noConflict = function() {
-        root.Brace = previousBrace;
+    var noConflict = function () {
+        root[rootExport] = previousBrace;
         return this;
-    };    
+    };
 
-    var _ = root._;
-    if (!_ && (typeof require !== 'undefined')){ _ = require('underscore'); }
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['underscore', 'backbone'], function (_, Backbone) {
+            var _brace = (root[rootExport] = factory(_, Backbone));
+            _brace.noConflict = noConflict;
+            return _brace;
+        });
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory(require('underscore'), require('backbone'));
+    } else {
+        // Browser globals
+        var _brace = factory(root._, root.Backbone);
+        _brace.noConflict = noConflict;
+        root[rootExport] = _brace;
+    }
+}(this, function (_, Backbone) {
 
-    var Backbone = root.Backbone;
-    if (!Backbone && (typeof require !== 'undefined')) { Backbone = require('backbone'); }
+    var Brace = {};
 
     // ## Helper functions
 
@@ -76,7 +83,7 @@
     //   type's first element as the type. E.g.,
     //         `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`
     //   It will return a new array consisting of the result of each recursive call.
-    // * a Backbone.Collection constructor: this function may be recursively called for each element in 
+    // * a Backbone.Collection constructor: this function may be recursively called for each element in
     //     value using type.model as the type. E.g.,
     //         `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
     //         recursively call `ensureType(Number, 1)`
@@ -358,7 +365,7 @@
                 methods.getId = function() { return this[idGetter](); };
                 methods.setId = function(val, options) { return this[idSetter](val, options); };
             }
-            
+
             return methods;
         },
         /**
@@ -453,9 +460,9 @@
             // TODO: has, escape, unset
             var attrs,
                 attributes = this.namedAttributes;
-            
+
             if (!attributes || key == null) {
-                return oldSet.apply(this, arguments);    
+                return oldSet.apply(this, arguments);
             }
 
             if (_.isObject(key)) {
@@ -476,7 +483,7 @@
                 attrs[attr] = ensureType(attributes[attr], attrs[attr]);
             }
 
-            return oldSet.call(this, attrs, options);    
+            return oldSet.call(this, attrs, options);
         };
 
         var oldGet = proto.get;
@@ -530,4 +537,6 @@
     Evented.extend = Backbone.Model.extend;
     Brace.Evented = applyExtensions(Evented);
 
-}());
+    return Brace;
+
+}));
