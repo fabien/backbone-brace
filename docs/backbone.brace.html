@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*! 
- *  Backbone Brace - 2014-06-26 
+ *  Backbone Brace - 2014-06-27 
  *  Copyright 2014 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
@@ -108,11 +108,7 @@ if there was no previous version loaded).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        define([<span class="hljs-string">'underscore'</span>, <span class="hljs-string">'backbone'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(_, Backbone)</span> {</span>
-            <span class="hljs-keyword">var</span> _brace = (root[rootExport] = factory(_, Backbone));
-            _brace.noConflict = noConflict;
-            <span class="hljs-keyword">return</span> _brace;
-        });
+            <div class="content"><div class='highlight'><pre>        define([<span class="hljs-string">'underscore'</span>, <span class="hljs-string">'backbone'</span>], factory);
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {</pre></div></div>
             
         </li>
