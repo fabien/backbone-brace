@@ -20,11 +20,7 @@
 
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['underscore', 'backbone'], function (_, Backbone) {
-            var _brace = (root[rootExport] = factory(_, Backbone));
-            _brace.noConflict = noConflict;
-            return _brace;
-        });
+        define(['underscore', 'backbone'], factory);
     } else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
