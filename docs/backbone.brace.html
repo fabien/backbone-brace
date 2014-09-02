@@ -30,12 +30,12 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="comment">/*! 
- *  Backbone Brace - 2013-11-07 
- *  Copyright 2013 Atlassian Software Systems Pty Ltd
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*! 
+ *  Backbone Brace - 2014-06-27 
+ *  Copyright 2014 Atlassian Software Systems Pty Ltd
  *  Licensed under the Apache License, Version 2.0
  */</span> 
-(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> {</span></pre></div></div>
             
         </li>
         
@@ -46,11 +46,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>node / browser imports, copied from here</p>
+              <p>Global to export</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> root = <span class="keyword">this</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> rootExport = <span class="hljs-string">'Brace'</span>;</pre></div></div>
             
         </li>
         
@@ -65,14 +65,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> previousBrace = root.Brace;
-
-    <span class="keyword">var</span> Brace;
-    <span class="keyword">if</span> (<span class="keyword">typeof</span> exports !== <span class="string">'undefined'</span>) {
-        Brace = exports;
-    } <span class="keyword">else</span> {
-        Brace = root.Brace = {};
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> previousBrace = root[rootExport];</pre></div></div>
             
         </li>
         
@@ -83,28 +76,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>noConflict will return this version of Brace and reset the global 
+              <p>noConflict will return this version of Brace and reset the global
 Brace variable to the previously loaded version of Brace (or undefined
 if there was no previous version loaded).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/**
      * Returns the current copy of Brace and sets the global Brace object to the
-     * previous version (or undefined if there was no previous version loaded). 
+     * previous version (or undefined if there was no previous version loaded).
      *
      * @returns Object A reference to this version of Brace.
      */</span>
-    Brace.noConflict = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-        root.Brace = previousBrace;
-        <span class="keyword">return</span> <span class="keyword">this</span>;
-    };    
+    <span class="hljs-keyword">var</span> noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+        root[rootExport] = previousBrace;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    };
 
-    <span class="keyword">var</span> _ = root._;
-    <span class="keyword">if</span> (!_ &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)){ _ = require(<span class="string">'underscore'</span>); }
-
-    <span class="keyword">var</span> Backbone = root.Backbone;
-    <span class="keyword">if</span> (!Backbone &amp;&amp; (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span>)) { Backbone = require(<span class="string">'backbone'</span>); }</pre></div></div>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span> &amp;&amp; define.amd) {</pre></div></div>
             
         </li>
         
@@ -112,34 +101,15 @@ if there was no previous version loaded).</p>
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h2>Helper functions</h2>
-<p>Given an array, this function will return an object where each
-    property name is an element of the original array. The value
-    of each property will be null.
-Given anything else, this function will return the object untouched.</p>
+              <p>AMD. Register as an anonymous module.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
-     * This function is used to ensure a consistent shape for the namedAttributes property.
-     * namedAttributes accepts two formats:
-     * - An array like ['attr1', 'attr2'] if you don't care about the type of any attribute.
-     * - An object like { attr1 : type1, attr2 : type2 } to specify an expected type.
-     *
-     * @param maybeArray {*} thing to transform into an object
-     */</span>
-    <span class="function"><span class="keyword">function</span> <span class="title">asObject</span><span class="params">(maybeArray)</span> {</span>
-        <span class="keyword">if</span> (_.isArray(maybeArray)) {
-            <span class="keyword">return</span> _.reduce(maybeArray, <span class="function"><span class="keyword">function</span><span class="params">(obj, prop)</span> {</span>
-                obj[prop] =  <span class="literal">null</span>;
-                <span class="keyword">return</span> obj;
-            }, {});
-        }
-        <span class="keyword">return</span> maybeArray;
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        define([<span class="hljs-string">'underscore'</span>, <span class="hljs-string">'backbone'</span>], factory);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {</pre></div></div>
             
         </li>
         
@@ -150,78 +120,14 @@ Given anything else, this function will return the object untouched.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Return a value of the specified type, generated from the value parameter.
-If type conversion is necessary, this function will generate a new object using
-<code>new type(value)</code></p>
-<p><code>value</code> Any value. null and undefined values will be untouched.</p>
-<p><code>type</code> When given:</p>
-<ul>
-<li>a falsy value: this function will do no type conversion.</li>
-<li>a string: this function will throw if <code>typeof value !== type</code>, and return value otherwise.</li>
-<li>an Array: this function will be recursively called for each element in value using
-type&#39;s first element as the type. E.g.,<pre><code>  `ensureType([ Number ], [ 1 ])` will recursively call `ensureType(Number, 1)`</code></pre>
-It will return a new array consisting of the result of each recursive call.</li>
-<li>a Backbone.Collection constructor: this function may be recursively called for each element in 
-  value using type.model as the type. E.g.,<pre><code>  `ensureType({ model : Number, __proto__ : Backbone.Collection.prototype }, [ 1 ])` will
-  recursively call `ensureType(Number, 1)`</code></pre>
-  It will return a Backbone.Collection via new type({array of recursive results})</li>
-<li>a function: This will check value instanceof type, and if false, will return <code>new type(value)</code>
-  Otherwise it will return value directly</li>
-</ul>
+              <p>Node. Does not work with strict CommonJS, but
+only CommonJS-like enviroments that support module.exports,
+like Node.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
-     * @param value {*}
-     * @param type {Array|function(new:*, *)|string|false|null|undefined}
-     */</span>
-    <span class="function"><span class="keyword">function</span> <span class="title">ensureType</span><span class="params">(type, value)</span> {</span>
-        <span class="comment">/*jshint newcap: false */</span>
-        <span class="keyword">if</span> (!type || value == <span class="literal">null</span>) {
-            <span class="keyword">return</span> value;
-        }
-
-        <span class="keyword">if</span> (type === String &amp;&amp; _.isString(value)) {
-            <span class="keyword">return</span> value;
-        }
-        <span class="keyword">if</span> (type === Number &amp;&amp; _.isNumber(value)) {
-            <span class="keyword">return</span> value;
-        }
-        <span class="keyword">if</span> (type === Boolean &amp;&amp; _.isBoolean(value)) {
-            <span class="keyword">return</span> value;
-        }
-
-        <span class="keyword">if</span> (<span class="keyword">typeof</span> type === <span class="string">'string'</span> || type <span class="keyword">instanceof</span> String) {
-            <span class="keyword">if</span> (<span class="keyword">typeof</span> value !== <span class="string">""</span>+type) {
-                <span class="keyword">throw</span> <span class="string">"The typeof "</span> + value + <span class="string">" is "</span> + <span class="keyword">typeof</span> value + <span class="string">" but expected it to be "</span> + type;
-            }
-            <span class="keyword">return</span> value;
-        }
-
-        <span class="keyword">if</span> (_.isArray(type) || type === Array) {
-            <span class="keyword">if</span> (!isArrayLike(value)) {
-                <span class="keyword">throw</span> <span class="string">"Array type expected, but nonnull, non-Array value provided."</span>;
-            }
-            <span class="keyword">return</span> type === Array || !type[<span class="number">0</span>] ?
-                value :
-                _.map(value, _.bind(ensureType, <span class="literal">null</span>, type[<span class="number">0</span>]));
-        }
-
-        <span class="keyword">if</span> (<span class="keyword">typeof</span> type !== <span class="string">'function'</span>) {
-            <span class="keyword">throw</span> <span class="string">"Invalid expected type "</span> + type +
-            <span class="string">'. Should be falsy, String, Array, Backbone.Collection constructor, or function.'</span>;
-        }
-
-        <span class="keyword">if</span> (value <span class="keyword">instanceof</span> type) {
-            <span class="keyword">return</span> value;
-        }
-
-        <span class="keyword">if</span> (isCollectionConstructor(type)) {
-            <span class="keyword">return</span> <span class="keyword">new</span> type(ensureType([ type.model ], value));
-        }
-
-        <span class="keyword">return</span> <span class="keyword">new</span> type(value);
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        module.exports = factory(<span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">'backbone'</span>));
+    } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -232,17 +138,17 @@ It will return a new array consisting of the result of each recursive call.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Returns true if obj is extend()&#39;ed from Backbone.Collection (or from another collection)</p>
+              <p>Browser globals</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="comment">/**
-     * @param obj {*} object to check
-     * @param rootConstructor {?function(new:Backbone.Collection)} optional constructor that inherits from
-     *        Backbone.Collection. Will check that obj is extend()'ed from this instead of Backbone.Collection.
-     */</span>
-    <span class="function"><span class="keyword">function</span> <span class="title">isCollectionConstructor</span><span class="params">(obj, rootConstructor)</span> {</span>
-        <span class="keyword">return</span>  obj &amp;&amp; (</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> _brace = factory(root._, root.Backbone);
+        _brace.noConflict = noConflict;
+        root[rootExport] = _brace;
+    }
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(_, Backbone)</span> {</span>
+
+    <span class="hljs-keyword">var</span> Brace = {};</pre></div></div>
             
         </li>
         
@@ -253,11 +159,9 @@ It will return a new array consisting of the result of each recursive call.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>obj <em>distantly</em> extends Backbone.Collection (most likely case)</p>
+              <h2 id="helper-functions">Helper functions</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>            obj.__super__ <span class="keyword">instanceof</span> (rootConstructor || Backbone.Collection) ||</pre></div></div>
             
         </li>
         
@@ -268,12 +172,30 @@ It will return a new array consisting of the result of each recursive call.</li>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>obj <em>directly</em> extends Backbone.Collection (e.g., Brace.Collection)
-!(fn.prototype instanceof fn), so the above check doesn&#39;t catch this case.</p>
+              <p>Given an array, this function will return an object where each
+    property name is an element of the original array. The value
+    of each property will be null.
+Given anything else, this function will return the object untouched.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            obj.__super__ === (rootConstructor || Backbone.Collection).prototype ||</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/**
+     * This function is used to ensure a consistent shape for the namedAttributes property.
+     * namedAttributes accepts two formats:
+     * - An array like ['attr1', 'attr2'] if you don't care about the type of any attribute.
+     * - An object like { attr1 : type1, attr2 : type2 } to specify an expected type.
+     *
+     * @param maybeArray {*} thing to transform into an object
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">asObject</span><span class="hljs-params">(maybeArray)</span> {</span>
+        <span class="hljs-keyword">if</span> (_.isArray(maybeArray)) {
+            <span class="hljs-keyword">return</span> _.reduce(maybeArray, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj, prop)</span> {</span>
+                obj[prop] =  <span class="hljs-literal">null</span>;
+                <span class="hljs-keyword">return</span> obj;
+            }, {});
+        }
+        <span class="hljs-keyword">return</span> maybeArray;
+    }</pre></div></div>
             
         </li>
         
@@ -283,6 +205,140 @@ It will return a new array consisting of the result of each recursive call.</li>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Return a value of the specified type, generated from the value parameter.
+If type conversion is necessary, this function will generate a new object using
+<code>new type(value)</code></p>
+<p><code>value</code> Any value. null and undefined values will be untouched.</p>
+<p><code>type</code> When given:</p>
+<ul>
+<li>a falsy value: this function will do no type conversion.</li>
+<li>a string: this function will throw if <code>typeof value !== type</code>, and return value otherwise.</li>
+<li>an Array: this function will be recursively called for each element in value using
+type’s first element as the type. E.g.,<pre><code>  `ensureType([ <span class="hljs-built_in">Number</span> ], [ <span class="hljs-number">1</span> ])` will recursively call `ensureType(<span class="hljs-built_in">Number</span>, <span class="hljs-number">1</span>)`
+</code></pre>It will return a new array consisting of the result of each recursive call.</li>
+<li>a Backbone.Collection constructor: this function may be recursively called for each element in
+  value using type.model as the type. E.g.,<pre><code>  `ensureType({ model : <span class="hljs-built_in">Number</span>, __proto__ : Backbone.Collection.prototype }, [ <span class="hljs-number">1</span> ])` will
+  recursively call `ensureType(<span class="hljs-built_in">Number</span>, <span class="hljs-number">1</span>)`
+</code></pre>  It will return a Backbone.Collection via new type({array of recursive results})</li>
+<li>a function: This will check value instanceof type, and if false, will return <code>new type(value)</code>
+  Otherwise it will return value directly</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/**
+     * @param value {*}
+     * @param type {Array|function(new:*, *)|string|false|null|undefined}
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ensureType</span><span class="hljs-params">(type, value)</span> {</span>
+        <span class="hljs-comment">/*jshint newcap: false */</span>
+        <span class="hljs-keyword">if</span> (!type || value == <span class="hljs-literal">null</span>) {
+            <span class="hljs-keyword">return</span> value;
+        }
+
+        <span class="hljs-keyword">if</span> (type === <span class="hljs-built_in">String</span> &amp;&amp; _.isString(value)) {
+            <span class="hljs-keyword">return</span> value;
+        }
+        <span class="hljs-keyword">if</span> (type === <span class="hljs-built_in">Number</span> &amp;&amp; _.isNumber(value)) {
+            <span class="hljs-keyword">return</span> value;
+        }
+        <span class="hljs-keyword">if</span> (type === <span class="hljs-built_in">Boolean</span> &amp;&amp; _.isBoolean(value)) {
+            <span class="hljs-keyword">return</span> value;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> type === <span class="hljs-string">'string'</span> || type <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">String</span>) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">""</span>+type) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-string">"The typeof "</span> + value + <span class="hljs-string">" is "</span> + <span class="hljs-keyword">typeof</span> value + <span class="hljs-string">" but expected it to be "</span> + type;
+            }
+            <span class="hljs-keyword">return</span> value;
+        }
+
+        <span class="hljs-keyword">if</span> (_.isArray(type) || type === <span class="hljs-built_in">Array</span>) {
+            <span class="hljs-keyword">if</span> (!isArrayLike(value)) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-string">"Array type expected, but nonnull, non-Array value provided."</span>;
+            }
+            <span class="hljs-keyword">return</span> type === <span class="hljs-built_in">Array</span> || !type[<span class="hljs-number">0</span>] ?
+                value :
+                _.map(value, _.bind(ensureType, <span class="hljs-literal">null</span>, type[<span class="hljs-number">0</span>]));
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> type !== <span class="hljs-string">'function'</span>) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">"Invalid expected type "</span> + type +
+            <span class="hljs-string">'. Should be falsy, String, Array, Backbone.Collection constructor, or function.'</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> type) {
+            <span class="hljs-keyword">return</span> value;
+        }
+
+        <span class="hljs-keyword">if</span> (isCollectionConstructor(type)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> type(ensureType([ type.model ], value));
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> type(value);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Returns true if obj is extend()’ed from Backbone.Collection (or from another collection)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/**
+     * @param obj {*} object to check
+     * @param rootConstructor {?function(new:Backbone.Collection)} optional constructor that inherits from
+     *        Backbone.Collection. Will check that obj is extend()'ed from this instead of Backbone.Collection.
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isCollectionConstructor</span><span class="hljs-params">(obj, rootConstructor)</span> {</span>
+        <span class="hljs-keyword">return</span>  obj &amp;&amp; (</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>obj <em>distantly</em> extends Backbone.Collection (most likely case)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            obj.__super__ <span class="hljs-keyword">instanceof</span> (rootConstructor || Backbone.Collection) ||</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>obj <em>directly</em> extends Backbone.Collection (e.g., Brace.Collection)
+!(fn.prototype instanceof fn), so the above check doesn’t catch this case.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            obj.__super__ === (rootConstructor || Backbone.Collection).prototype ||</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>obj <em>is</em> Backbone.Collection</p>
 
@@ -295,151 +351,25 @@ It will return a new array consisting of the result of each recursive call.</li>
         </li>
         
         
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>array-like is currently defined by &quot;has a length property, and is not a string or
-function or Backbone.Collection.&quot;
-Backbone.Collections are excluded because you can&#39;t do collection[0] to access models.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">isArrayLike</span><span class="params">(value)</span> {</span>
-        <span class="keyword">return</span> _.has(value,<span class="string">'length'</span>) &amp;&amp; !(
-            value <span class="keyword">instanceof</span> String ||
-            _.has({<span class="string">'string'</span>:<span class="number">1</span>, <span class="string">'function'</span>:<span class="number">1</span>}, <span class="keyword">typeof</span> value) ||
-            value <span class="keyword">instanceof</span> Backbone.Collection
-        );
-    }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>With namedAttributes, we want to allow both the mixin, and the extender to define types.
-We want to take the stricter of the two types where possible.
-Where the types conflict, throw an error.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">nonConflictedTypes</span><span class="params">(obj, refObj)</span> {</span>
-        <span class="keyword">var</span> newObj = {};
-        _.each(obj, <span class="function"><span class="keyword">function</span><span class="params">(val, key)</span> {</span>
-            <span class="keyword">if</span> (!refObj[key] || assumes(val, refObj[key])) {
-                newObj[key] = val;
-            } <span class="keyword">else</span> <span class="keyword">if</span> (!val || assumes(refObj[key], val)) {
-                <span class="keyword">return</span>;
-            } <span class="keyword">else</span> {
-                <span class="keyword">throw</span> key + <span class="string">" has conflicted type descriptors."</span>;
-            }
-        });
-        <span class="keyword">return</span> newObj;
-    }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>One type <em>assumes</em> another when the conditions for meeting its
-type-check are a super set of the assumed type&#39;s conditions.
-E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you can&#39;t have an array of strings without an array.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">assumes</span><span class="params">(assumer, assumed)</span> {</span>
-        <span class="keyword">if</span> (!assumed || assumed === assumer) {
-            <span class="keyword">return</span> <span class="literal">true</span>;
-        }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>if it&#39;s a string, only the previous strict equality check would have sufficed.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!assumer || <span class="keyword">typeof</span> assumer === <span class="string">'string'</span>) {
-            <span class="keyword">return</span> <span class="literal">false</span>;
-        }
-        <span class="keyword">if</span> (assumer <span class="keyword">instanceof</span> Array) {
-            <span class="keyword">return</span> assumed === Array ||
-                (assumed <span class="keyword">instanceof</span> Array &amp;&amp; assumes(assumer[<span class="number">0</span>], assumed[<span class="number">0</span>]));
-        }
-        <span class="keyword">if</span> (<span class="keyword">typeof</span> assumed !== <span class="string">'function'</span>) {
-            <span class="keyword">return</span> <span class="literal">false</span>;
-        }
-        <span class="keyword">if</span> (isCollectionConstructor(assumed)) {
-            <span class="keyword">return</span> isCollectionConstructor(assumer, assumed);
-        }
-        <span class="keyword">return</span> assumer.prototype <span class="keyword">instanceof</span> assumed;
-    }
-
-    <span class="comment">/**
-     * @param {Object?} object
-     * @return {Object} plain object
-     */</span>
-    <span class="function"><span class="keyword">function</span> <span class="title">nestedToJSON</span><span class="params">(object)</span> {</span>
-        <span class="keyword">if</span> (_.isObject(object)) {
-            <span class="keyword">return</span> _.reduce(object, <span class="function"><span class="keyword">function</span><span class="params">(memo, value, key)</span> {</span>
-                <span class="keyword">if</span> (value &amp;&amp; _.isFunction(value.toJSON)) {
-                    memo[key] = value.toJSON();
-                } <span class="keyword">else</span> <span class="keyword">if</span> (_.isArray(value)) {
-                    memo[key] = _.map(value, <span class="function"><span class="keyword">function</span><span class="params">(el)</span> {</span>
-                        <span class="keyword">if</span> (el &amp;&amp; _.isFunction(el.toJSON)) {
-                            <span class="keyword">return</span> el.toJSON();
-                        } <span class="keyword">else</span> {
-                            <span class="keyword">return</span> el;
-                        }
-                    });
-                }
-                <span class="keyword">return</span> memo;
-            }, object);
-        } <span class="keyword">else</span> {
-            <span class="keyword">return</span> object;
-        }
-    }
-
-    <span class="function"><span class="keyword">function</span> <span class="title">createToJSON</span><span class="params">(previousToJSON)</span> {</span>
-        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">toJSON</span><span class="params">()</span> {</span>
-            <span class="keyword">var</span> json = previousToJSON.call(<span class="keyword">this</span>);
-            <span class="keyword">return</span> nestedToJSON(json);
-        };
-    }</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2>Brace.Mixins</h2>
-<p>Mixin utilities</p>
+              <p>array-like is currently defined by “has a length property, and is not a string or
+function or Backbone.Collection.”
+Backbone.Collections are excluded because you can’t do collection[0] to access models.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Brace.Mixins = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isArrayLike</span><span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> _.has(value,<span class="hljs-string">'length'</span>) &amp;&amp; !(
+            value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">String</span> ||
+            _.has({<span class="hljs-string">'string'</span>:<span class="hljs-number">1</span>, <span class="hljs-string">'function'</span>:<span class="hljs-number">1</span>}, <span class="hljs-keyword">typeof</span> value) ||
+            value <span class="hljs-keyword">instanceof</span> Backbone.Collection
+        );
+    }</pre></div></div>
             
         </li>
         
@@ -450,13 +380,25 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Creates a camelCased method name</p>
+              <p>With namedAttributes, we want to allow both the mixin, and the extender to define types.
+We want to take the stricter of the two types where possible.
+Where the types conflict, throw an error.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        createMethodName: <span class="function"><span class="keyword">function</span><span class="params">(prefix, suffix)</span> {</span>
-            <span class="keyword">return</span> prefix + suffix.charAt(<span class="number">0</span>).toUpperCase() + suffix.substr(<span class="number">1</span>);
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nonConflictedTypes</span><span class="hljs-params">(obj, refObj)</span> {</span>
+        <span class="hljs-keyword">var</span> newObj = {};
+        _.each(obj, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(val, key)</span> {</span>
+            <span class="hljs-keyword">if</span> (!refObj[key] || assumes(val, refObj[key])) {
+                newObj[key] = val;
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!val || assumes(refObj[key], val)) {
+                <span class="hljs-keyword">return</span>;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">throw</span> key + <span class="hljs-string">" has conflicted type descriptors."</span>;
+            }
+        });
+        <span class="hljs-keyword">return</span> newObj;
+    }</pre></div></div>
             
         </li>
         
@@ -467,13 +409,16 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Applies a mixin to the given constructor&#39;s prototype.</p>
+              <p>One type <em>assumes</em> another when the conditions for meeting its
+type-check are a super set of the assumed type’s conditions.
+E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you can’t have an array of strings without an array.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        applyMixin: <span class="function"><span class="keyword">function</span><span class="params">(ctor, mixin)</span> {</span>
-            _.forEach(_.keys(mixin), <span class="function"><span class="keyword">function</span><span class="params">(key)</span> {</span>
-                <span class="keyword">var</span> proto = ctor.prototype;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">assumes</span><span class="hljs-params">(assumer, assumed)</span> {</span>
+        <span class="hljs-keyword">if</span> (!assumed || assumed === assumer) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        }</pre></div></div>
             
         </li>
         
@@ -484,20 +429,57 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p><code>initialize</code> is not mixed in - we compose the mixin&#39;s initialize with the existing initialize method (if it exists).</p>
+              <p>if it’s a string, only the previous strict equality check would have sufficed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"initialize"</span> === key) {
-                    <span class="keyword">var</span> oldInitialize = proto.initialize;
-                    proto.initialize = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-                        <span class="keyword">if</span> (oldInitialize) {
-                            oldInitialize.apply(<span class="keyword">this</span>, arguments);
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (!assumer || <span class="hljs-keyword">typeof</span> assumer === <span class="hljs-string">'string'</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">if</span> (assumer <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>) {
+            <span class="hljs-keyword">return</span> assumed === <span class="hljs-built_in">Array</span> ||
+                (assumed <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> &amp;&amp; assumes(assumer[<span class="hljs-number">0</span>], assumed[<span class="hljs-number">0</span>]));
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> assumed !== <span class="hljs-string">'function'</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">if</span> (isCollectionConstructor(assumed)) {
+            <span class="hljs-keyword">return</span> isCollectionConstructor(assumer, assumed);
+        }
+        <span class="hljs-keyword">return</span> assumer.prototype <span class="hljs-keyword">instanceof</span> assumed;
+    }
+
+    <span class="hljs-comment">/**
+     * @param {Object?} object
+     * @return {Object} plain object
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nestedToJSON</span><span class="hljs-params">(object)</span> {</span>
+        <span class="hljs-keyword">if</span> (_.isObject(object)) {
+            <span class="hljs-keyword">return</span> _.reduce(object, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value, key)</span> {</span>
+                <span class="hljs-keyword">if</span> (value &amp;&amp; _.isFunction(value.toJSON)) {
+                    memo[key] = value.toJSON();
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (_.isArray(value)) {
+                    memo[key] = _.map(value, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(el)</span> {</span>
+                        <span class="hljs-keyword">if</span> (el &amp;&amp; _.isFunction(el.toJSON)) {
+                            <span class="hljs-keyword">return</span> el.toJSON();
+                        } <span class="hljs-keyword">else</span> {
+                            <span class="hljs-keyword">return</span> el;
                         }
-                        mixin.initialize.apply(<span class="keyword">this</span>, arguments);
-                    };
-                    <span class="keyword">return</span>;
-                }</pre></div></div>
+                    });
+                }
+                <span class="hljs-keyword">return</span> memo;
+            }, object);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> object;
+        }
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createToJSON</span><span class="hljs-params">(previousToJSON)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toJSON</span><span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> json = previousToJSON.call(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">return</span> nestedToJSON(json);
+        };
+    }</pre></div></div>
             
         </li>
         
@@ -508,23 +490,12 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p><code>validate</code> is not mixed in - we compose the mixin&#39;s validate with the existing validate method (if it exists).</p>
+              <h2 id="brace-mixins">Brace.Mixins</h2>
+<p>Mixin utilities</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"validate"</span> === key) {
-                    <span class="keyword">var</span> oldValidate = proto.validate;
-                    proto.validate = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-                        <span class="keyword">if</span> (oldValidate) {
-                            <span class="keyword">var</span> errors = oldValidate.apply(<span class="keyword">this</span>, arguments);
-                            <span class="keyword">if</span> (errors) {
-                                <span class="keyword">return</span> errors;
-                            }
-                        }
-                        <span class="keyword">return</span> mixin.validate.apply(<span class="keyword">this</span>, arguments);
-                    };
-                    <span class="keyword">return</span>;
-                }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Brace.Mixins = {</pre></div></div>
             
         </li>
         
@@ -535,21 +506,13 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p><code>defaults</code> are not mixed in - we compose the mixin&#39;s defaults with existing defaults if they exist</p>
+              <p>Creates a camelCased method name</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"defaults"</span> === key) {
-                    <span class="keyword">var</span> defaults = proto.defaults || (proto.defaults = {});
-                    <span class="keyword">var</span> mixinDefaults = mixin[key];
-                    <span class="keyword">for</span> (<span class="keyword">var</span> id <span class="keyword">in</span> mixinDefaults) {
-                        <span class="keyword">if</span> (defaults.hasOwnProperty(id)) {
-                            <span class="keyword">throw</span> <span class="string">"Mixin error: class already has default '"</span> + id + <span class="string">"' defined"</span>;
-                        }
-                        defaults[id] = mixinDefaults[id];
-                    }
-                    <span class="keyword">return</span>;
-                }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        createMethodName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(prefix, suffix)</span> {</span>
+            <span class="hljs-keyword">return</span> prefix + suffix.charAt(<span class="hljs-number">0</span>).toUpperCase() + suffix.substr(<span class="hljs-number">1</span>);
+        },</pre></div></div>
             
         </li>
         
@@ -560,16 +523,13 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p><code>namedAttributes</code> are added to the mixin, and we mixin in getters and setters for each attribute.</p>
+              <p>Applies a mixin to the given constructor’s prototype.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"namedAttributes"</span> === key) {
-                    <span class="keyword">var</span> protoAttrs = asObject(proto.namedAttributes) || {};
-                    <span class="keyword">var</span> mixinAttrs = asObject(mixin[key]);
-                    proto.namedAttributes = _.extend(protoAttrs, nonConflictedTypes(mixinAttrs, protoAttrs));
-                    <span class="keyword">return</span>;
-                }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        applyMixin: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctor, mixin)</span> {</span>
+            _.forEach(_.keys(mixin), <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key)</span> {</span>
+                <span class="hljs-keyword">var</span> proto = ctor.prototype;</pre></div></div>
             
         </li>
         
@@ -580,11 +540,20 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p><code>namedEvents</code> are added to the mixin, and we mix in on and trigger methods for each event.</p>
+              <p><code>initialize</code> is not mixed in - we compose the mixin’s initialize with the existing initialize method (if it exists).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="string">"namedEvents"</span> === key) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (<span class="hljs-string">"initialize"</span> === key) {
+                    <span class="hljs-keyword">var</span> oldInitialize = proto.initialize;
+                    proto.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                        <span class="hljs-keyword">if</span> (oldInitialize) {
+                            oldInitialize.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+                        }
+                        mixin.initialize.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+                    };
+                    <span class="hljs-keyword">return</span>;
+                }</pre></div></div>
             
         </li>
         
@@ -595,18 +564,22 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p><code>events</code> must be an array</p>
+              <p><code>validate</code> is not mixed in - we compose the mixin’s validate with the existing validate method (if it exists).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (!_.isArray(mixin[key])) {
-                        <span class="keyword">throw</span> <span class="string">"Expects events member on mixin to be an array"</span>;
-                    }
-                    <span class="keyword">if</span> (!proto.namedEvents) {
-                        proto.namedEvents = [];
-                    }
-                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
-                    <span class="keyword">return</span>;
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (<span class="hljs-string">"validate"</span> === key) {
+                    <span class="hljs-keyword">var</span> oldValidate = proto.validate;
+                    proto.validate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                        <span class="hljs-keyword">if</span> (oldValidate) {
+                            <span class="hljs-keyword">var</span> errors = oldValidate.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+                            <span class="hljs-keyword">if</span> (errors) {
+                                <span class="hljs-keyword">return</span> errors;
+                            }
+                        }
+                        <span class="hljs-keyword">return</span> mixin.validate.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+                    };
+                    <span class="hljs-keyword">return</span>;
                 }</pre></div></div>
             
         </li>
@@ -618,17 +591,21 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Name collisions with other mixins or or the object we&#39;re mixing into result in violent and forceful disapproval.</p>
+              <p><code>defaults</code> are not mixed in - we compose the mixin’s defaults with existing defaults if they exist</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (proto.hasOwnProperty(key)) {
-                    <span class="keyword">throw</span> <span class="string">"Mixin error: class already has property '"</span> + key + <span class="string">"' defined"</span>;
-                }
-                proto[key] = mixin[key];
-            }, <span class="keyword">this</span>);
-        }
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (<span class="hljs-string">"defaults"</span> === key) {
+                    <span class="hljs-keyword">var</span> defaults = proto.defaults || (proto.defaults = {});
+                    <span class="hljs-keyword">var</span> mixinDefaults = mixin[key];
+                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> id <span class="hljs-keyword">in</span> mixinDefaults) {
+                        <span class="hljs-keyword">if</span> (defaults.hasOwnProperty(id)) {
+                            <span class="hljs-keyword">throw</span> <span class="hljs-string">"Mixin error: class already has default '"</span> + id + <span class="hljs-string">"' defined"</span>;
+                        }
+                        defaults[id] = mixinDefaults[id];
+                    }
+                    <span class="hljs-keyword">return</span>;
+                }</pre></div></div>
             
         </li>
         
@@ -636,14 +613,19 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
         <li id="section-25">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <h2>Brace.AttributesMixinCreator</h2>
+              <p><code>namedAttributes</code> are added to the mixin, and we mixin in getters and setters for each attribute.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Brace.AttributesMixinCreator = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (<span class="hljs-string">"namedAttributes"</span> === key) {
+                    <span class="hljs-keyword">var</span> protoAttrs = asObject(proto.namedAttributes) || {};
+                    <span class="hljs-keyword">var</span> mixinAttrs = asObject(mixin[key]);
+                    proto.namedAttributes = _.extend(protoAttrs, nonConflictedTypes(mixinAttrs, protoAttrs));
+                    <span class="hljs-keyword">return</span>;
+                }</pre></div></div>
             
         </li>
         
@@ -654,23 +636,11 @@ E.g., <code>[ &#39;string&#39; ]</code> assumes <code>Array</code> because you c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Creates a mixin of getter and setter methods for each item in the given attribute list.
-A getter and setter for <code>id</code> is always generated.</p>
+              <p><code>namedEvents</code> are added to the mixin, and we mix in on and trigger methods for each event.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        create: <span class="function"><span class="keyword">function</span><span class="params">(attributes, idAttribute)</span> {</span>
-            <span class="keyword">var</span> methods = {};
-
-            <span class="keyword">if</span> (!attributes) {
-                attributes = {};
-            }
-
-            <span class="keyword">if</span> (!_.has(attributes, <span class="string">"id"</span>)) {
-                attributes.id = <span class="literal">null</span>;
-            }
-
-            _.each(attributes, <span class="function"><span class="keyword">function</span> <span class="params">(expectedType, attrName)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (<span class="hljs-string">"namedEvents"</span> === key) {</pre></div></div>
             
         </li>
         
@@ -681,19 +651,19 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>TODO: has, escape, unset</p>
+              <p><code>events</code> must be an array</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> setter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, attrName);
-                methods[setter] = <span class="function"><span class="keyword">function</span> <span class="params">(val,options)</span> {</span>
-                    <span class="keyword">return</span> <span class="keyword">this</span>.set(attrName, val, options);
-                };
-                <span class="keyword">var</span> getter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, attrName);
-                methods[getter] = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-                    <span class="keyword">return</span> <span class="keyword">this</span>.get(attrName);
-                };
-            });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                    <span class="hljs-keyword">if</span> (!_.isArray(mixin[key])) {
+                        <span class="hljs-keyword">throw</span> <span class="hljs-string">"Expects events member on mixin to be an array"</span>;
+                    }
+                    <span class="hljs-keyword">if</span> (!proto.namedEvents) {
+                        proto.namedEvents = [];
+                    }
+                    proto.namedEvents = _.uniq(proto.namedEvents.concat(mixin[key]));
+                    <span class="hljs-keyword">return</span>;
+                }</pre></div></div>
             
         </li>
         
@@ -704,26 +674,112 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
+              <p>Name collisions with other mixins or or the object we’re mixing into result in violent and forceful disapproval.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (proto.hasOwnProperty(key)) {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-string">"Mixin error: class already has property '"</span> + key + <span class="hljs-string">"' defined"</span>;
+                }
+                proto[key] = mixin[key];
+            }, <span class="hljs-keyword">this</span>);
+        }
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h2 id="brace-attributesmixincreator">Brace.AttributesMixinCreator</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Brace.AttributesMixinCreator = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Creates a mixin of getter and setter methods for each item in the given attribute list.
+A getter and setter for <code>id</code> is always generated.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        create: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attributes, idAttribute)</span> {</span>
+            <span class="hljs-keyword">var</span> methods = {};
+
+            <span class="hljs-keyword">if</span> (!attributes) {
+                attributes = {};
+            }
+
+            <span class="hljs-keyword">if</span> (!_.has(attributes, <span class="hljs-string">"id"</span>)) {
+                attributes.id = <span class="hljs-literal">null</span>;
+            }
+
+            _.each(attributes, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(expectedType, attrName)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>TODO: has, escape, unset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">var</span> setter = Brace.Mixins.createMethodName(<span class="hljs-string">"set"</span>, attrName);
+                methods[setter] = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(val,options)</span> {</span>
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.set(attrName, val, options);
+                };
+                <span class="hljs-keyword">var</span> getter = Brace.Mixins.createMethodName(<span class="hljs-string">"get"</span>, attrName);
+                methods[getter] = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.get(attrName);
+                };
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
               <p>If an idAttribute is specified</p>
 <ul>
 <li>the ID is going to be of the same type as that attribute</li>
-<li>alias the ID&#39;s getter/setter to that attribute&#39;s getter/setter</li>
-<li>Don&#39;t alias if the idAttribute is set to &#39;id&#39;</li>
+<li>alias the ID’s getter/setter to that attribute’s getter/setter</li>
+<li>Don’t alias if the idAttribute is set to ‘id’</li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> idAttribute === <span class="string">'string'</span> &amp;&amp; <span class="keyword">typeof</span> attributes[idAttribute] !== <span class="string">'undefined'</span> &amp;&amp; idAttribute !== <span class="string">'id'</span>) {
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> idAttribute === <span class="hljs-string">'string'</span> &amp;&amp; <span class="hljs-keyword">typeof</span> attributes[idAttribute] !== <span class="hljs-string">'undefined'</span> &amp;&amp; idAttribute !== <span class="hljs-string">'id'</span>) {
                 attributes.id = attributes[idAttribute];
-                <span class="keyword">var</span> idGetter = Brace.Mixins.createMethodName(<span class="string">"get"</span>, idAttribute);
-                <span class="keyword">var</span> idSetter = Brace.Mixins.createMethodName(<span class="string">"set"</span>, idAttribute);
-                methods.getId = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idGetter](); };
-                methods.setId = <span class="function"><span class="keyword">function</span><span class="params">(val, options)</span> {</span> <span class="keyword">return</span> <span class="keyword">this</span>[idSetter](val, options); };
+                <span class="hljs-keyword">var</span> idGetter = Brace.Mixins.createMethodName(<span class="hljs-string">"get"</span>, idAttribute);
+                <span class="hljs-keyword">var</span> idSetter = Brace.Mixins.createMethodName(<span class="hljs-string">"set"</span>, idAttribute);
+                methods.getId = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>[idGetter](); };
+                methods.setId = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(val, options)</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>[idSetter](val, options); };
             }
-            
-            <span class="keyword">return</span> methods;
+
+            <span class="hljs-keyword">return</span> methods;
         },
-        <span class="comment">/**
+        <span class="hljs-comment">/**
          * See JSDoc for this function in the backbone.brace file.
          *
          * Expose the ensureType function for people with custom constructors that don't call
@@ -739,134 +795,17 @@ A getter and setter for <code>id</code> is always generated.</p>
         </li>
         
         
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <h2>Brace.EventsMixinCreator</h2>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    Brace.EventsMixinCreator = {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        create: <span class="function"><span class="keyword">function</span><span class="params">(events)</span> {</span>
-            <span class="keyword">var</span> eventMethods = {};
-            <span class="keyword">var</span> createEvent = <span class="function"><span class="keyword">function</span><span class="params">(eventName)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>TODO: off</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="string">"on"</span>, eventName);
-                eventMethods[binder] = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-                    <span class="keyword">return</span> <span class="keyword">this</span>.on.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
-                };
-                <span class="keyword">var</span> trigger = Brace.Mixins.createMethodName(<span class="string">"trigger"</span>, eventName);
-                eventMethods[trigger] = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-                    <span class="keyword">return</span> <span class="keyword">this</span>.trigger.apply(<span class="keyword">this</span>, [eventName].concat(_.toArray(arguments)));
-                };
-            };
-            _.each(events, _.bind(createEvent,<span class="keyword">this</span>));
-
-            <span class="keyword">return</span> eventMethods;
-        }
-    };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>Generates an <code>extend</code> method that overrides Backbone&#39;s default <code>extend</code>. The new extend calls Backbone&#39;s <code>extend</code>, then:</p>
-<ul>
-<li>Adds all mixins specified in the <code>mixins</code> array</li>
-<li>Adds a <code>Brace.EventsMixinCreator</code> to mix in on and trigger methods for events specified in the <code>namedEvents</code> array</li>
-<li>Adds a <code>Brace.AttributesMixinCreator</code> to mix in get and set methods for attributes specified in the <code>attributes</code> array</li>
-</ul>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">generateMixinExtend</span><span class="params">(oldExtend)</span> {</span>
-        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">newExtend</span><span class="params">(protoProps, classProps)</span> {</span>
-            <span class="keyword">var</span> child;
-            <span class="keyword">var</span> cleanProtoProps = _.extend({}, protoProps);</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p>Remove <code>mixins</code> - we don&#39;t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
+              <h2 id="brace-eventsmixincreator">Brace.EventsMixinCreator</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> mixins;
-            <span class="keyword">if</span> (protoProps &amp;&amp; protoProps.mixins) {
-                mixins = protoProps.mixins;
-                <span class="keyword">delete</span> cleanProtoProps.mixins;
-            }
-            child = oldExtend.call(<span class="keyword">this</span>, cleanProtoProps, classProps);
-
-            <span class="keyword">if</span> (<span class="keyword">this</span>.prototype.namedEvents) {
-                Brace.Mixins.applyMixin(child, { namedEvents : <span class="keyword">this</span>.prototype.namedEvents });
-            }
-            <span class="keyword">if</span> (<span class="keyword">this</span>.prototype.namedAttributes) {
-                Brace.Mixins.applyMixin(child, { namedAttributes : <span class="keyword">this</span>.prototype.namedAttributes });
-            }
-
-            <span class="keyword">if</span> (mixins) {
-                _.each(protoProps.mixins, <span class="function"><span class="keyword">function</span><span class="params">(mixin)</span> {</span>
-                    Brace.Mixins.applyMixin(child, mixin);
-                });
-            }
-            <span class="keyword">if</span> (child.prototype.namedEvents) {
-                Brace.Mixins.applyMixin(child, Brace.EventsMixinCreator.create(child.prototype.namedEvents));
-            }
-            <span class="keyword">if</span> (child.prototype.namedAttributes) {
-                child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
-                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes, child.prototype.idAttribute));
-            }
-
-            <span class="keyword">if</span> (child.prototype.toJSON) {
-                child.prototype.toJSON = createToJSON(child.prototype.toJSON);
-            }
-
-            child.extend = newExtend;
-            <span class="keyword">return</span> child;
-        };
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Brace.EventsMixinCreator = {</pre></div></div>
             
         </li>
         
@@ -877,16 +816,13 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Overrides Backbone&#39;s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
+              <p>Creates a mixin of on and trigger methods for each item in the given list of events.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideSetGet</span><span class="params">(ctor, childCtor)</span> {</span>
-        <span class="keyword">var</span> proto = ctor.prototype;
-        <span class="keyword">var</span> childProto = childCtor.prototype;
-
-        <span class="keyword">var</span> oldSet = proto.set;
-        childProto.set = <span class="function"><span class="keyword">function</span><span class="params">(key, value, options)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        create: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(events)</span> {</span>
+            <span class="hljs-keyword">var</span> eventMethods = {};
+            <span class="hljs-keyword">var</span> createEvent = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(eventName)</span> {</span></pre></div></div>
             
         </li>
         
@@ -897,46 +833,24 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>TODO: has, escape, unset</p>
+              <p>TODO: off</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> attrs,
-                attributes = <span class="keyword">this</span>.namedAttributes;
-            
-            <span class="keyword">if</span> (!attributes || key == <span class="literal">null</span>) {
-                <span class="keyword">return</span> oldSet.apply(<span class="keyword">this</span>, arguments);    
-            }
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">var</span> binder = Brace.Mixins.createMethodName(<span class="hljs-string">"on"</span>, eventName);
+                eventMethods[binder] = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.on.apply(<span class="hljs-keyword">this</span>, [eventName].concat(_.toArray(<span class="hljs-built_in">arguments</span>)));
+                };
+                <span class="hljs-keyword">var</span> trigger = Brace.Mixins.createMethodName(<span class="hljs-string">"trigger"</span>, eventName);
+                eventMethods[trigger] = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.trigger.apply(<span class="hljs-keyword">this</span>, [eventName].concat(_.toArray(<span class="hljs-built_in">arguments</span>)));
+                };
+            };
+            _.each(events, _.bind(createEvent,<span class="hljs-keyword">this</span>));
 
-            <span class="keyword">if</span> (_.isObject(key)) {
-                attrs = _.clone(key);
-                options = value;
-            } <span class="keyword">else</span> {
-                attrs = {};
-                attrs[key] = value;
-            }
-
-            <span class="keyword">for</span> (<span class="keyword">var</span> attr <span class="keyword">in</span> attrs) {
-                <span class="keyword">if</span> (!_.has(attrs, attr)) {
-                    <span class="keyword">continue</span>;
-                }
-                <span class="keyword">if</span> (!_.has(attributes, attr)) {
-                    <span class="keyword">throw</span> <span class="string">"Attribute '"</span> + attr + <span class="string">"' does not exist"</span>;
-                }
-                attrs[attr] = ensureType(attributes[attr], attrs[attr]);
-            }
-
-            <span class="keyword">return</span> oldSet.call(<span class="keyword">this</span>, attrs, options);    
-        };
-
-        <span class="keyword">var</span> oldGet = proto.get;
-        childProto.get = <span class="function"><span class="keyword">function</span><span class="params">(attr)</span> {</span>
-            <span class="keyword">if</span> (<span class="keyword">this</span>.namedAttributes &amp;&amp; !_.has(<span class="keyword">this</span>.namedAttributes, attr)) {
-                <span class="keyword">throw</span> <span class="string">"Attribute '"</span> + attr + <span class="string">"' does not exist"</span>;
-            }
-            <span class="keyword">return</span> oldGet.apply(<span class="keyword">this</span>, arguments);
-        };
-    }</pre></div></div>
+            <span class="hljs-keyword">return</span> eventMethods;
+        }
+    };</pre></div></div>
             
         </li>
         
@@ -947,19 +861,19 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>Overrides Backbone&#39;s <code>parse</code> method to parse only namedAttributes</p>
+              <p>Generates an <code>extend</code> method that overrides Backbone’s default <code>extend</code>. The new extend calls Backbone’s <code>extend</code>, then:</p>
+<ul>
+<li>Adds all mixins specified in the <code>mixins</code> array</li>
+<li>Adds a <code>Brace.EventsMixinCreator</code> to mix in on and trigger methods for events specified in the <code>namedEvents</code> array</li>
+<li>Adds a <code>Brace.AttributesMixinCreator</code> to mix in get and set methods for attributes specified in the <code>attributes</code> array</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">overrideParse</span><span class="params">(ctor, childCtor)</span> {</span>
-        <span class="keyword">var</span> proto = ctor.prototype;
-        <span class="keyword">var</span> childProto = childCtor.prototype;
-
-        <span class="keyword">var</span> oldParse = proto.parse;
-        childProto.parse = <span class="function"><span class="keyword">function</span><span class="params">(response, options)</span> {</span>
-            <span class="keyword">return</span> _.pick(oldParse(response, options), _.keys(<span class="keyword">this</span>.namedAttributes));
-        };
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateMixinExtend</span><span class="hljs-params">(oldExtend)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">newExtend</span><span class="hljs-params">(protoProps, classProps)</span> {</span>
+            <span class="hljs-keyword">var</span> child;
+            <span class="hljs-keyword">var</span> cleanProtoProps = _.extend({}, protoProps);</pre></div></div>
             
         </li>
         
@@ -970,15 +884,44 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
-              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+              <p>Remove <code>mixins</code> - we don’t want to see them on the created prototype. Note that we do want to see <code>namedAttributes</code> and <code>namedEvents</code> for debugging</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyExtensions</span><span class="params">(ctor)</span> {</span>
-        <span class="keyword">var</span> child = ctor.extend();
-        <span class="keyword">var</span> oldExtend = ctor.extend;
-        child.extend = generateMixinExtend(oldExtend);
-        <span class="keyword">return</span> child;
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> mixins;
+            <span class="hljs-keyword">if</span> (protoProps &amp;&amp; protoProps.mixins) {
+                mixins = protoProps.mixins;
+                <span class="hljs-keyword">delete</span> cleanProtoProps.mixins;
+            }
+            child = oldExtend.call(<span class="hljs-keyword">this</span>, cleanProtoProps, classProps);
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.prototype.namedEvents) {
+                Brace.Mixins.applyMixin(child, { namedEvents : <span class="hljs-keyword">this</span>.prototype.namedEvents });
+            }
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.prototype.namedAttributes) {
+                Brace.Mixins.applyMixin(child, { namedAttributes : <span class="hljs-keyword">this</span>.prototype.namedAttributes });
+            }
+
+            <span class="hljs-keyword">if</span> (mixins) {
+                _.each(protoProps.mixins, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mixin)</span> {</span>
+                    Brace.Mixins.applyMixin(child, mixin);
+                });
+            }
+            <span class="hljs-keyword">if</span> (child.prototype.namedEvents) {
+                Brace.Mixins.applyMixin(child, Brace.EventsMixinCreator.create(child.prototype.namedEvents));
+            }
+            <span class="hljs-keyword">if</span> (child.prototype.namedAttributes) {
+                child.prototype.namedAttributes = asObject(child.prototype.namedAttributes);
+                Brace.Mixins.applyMixin(child, Brace.AttributesMixinCreator.create(child.prototype.namedAttributes, child.prototype.idAttribute));
+            }
+
+            <span class="hljs-keyword">if</span> (child.prototype.toJSON) {
+                child.prototype.toJSON = createToJSON(child.prototype.toJSON);
+            }
+
+            child.extend = newExtend;
+            <span class="hljs-keyword">return</span> child;
+        };
     }</pre></div></div>
             
         </li>
@@ -990,16 +933,16 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+              <p>Overrides Backbone’s <code>get</code> and <code>set</code> methods to validate that the attribute being get / set is a namedAttribute.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">applyModelExtensions</span><span class="params">(ctor)</span> {</span>
-        <span class="keyword">var</span> child = applyExtensions(ctor);
-        overrideSetGet(ctor, child);
-        overrideParse(ctor, child);
-        <span class="keyword">return</span> child;
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">overrideSetGet</span><span class="hljs-params">(ctor, childCtor)</span> {</span>
+        <span class="hljs-keyword">var</span> proto = ctor.prototype;
+        <span class="hljs-keyword">var</span> childProto = childCtor.prototype;
+
+        <span class="hljs-keyword">var</span> oldSet = proto.set;
+        childProto.set = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key, value, options)</span> {</span></pre></div></div>
             
         </li>
         
@@ -1010,6 +953,119 @@ A getter and setter for <code>id</code> is always generated.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
+              <p>TODO: has, escape, unset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> attrs,
+                attributes = <span class="hljs-keyword">this</span>.namedAttributes;
+
+            <span class="hljs-keyword">if</span> (!attributes || key == <span class="hljs-literal">null</span>) {
+                <span class="hljs-keyword">return</span> oldSet.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+            }
+
+            <span class="hljs-keyword">if</span> (_.isObject(key)) {
+                attrs = _.clone(key);
+                options = value;
+            } <span class="hljs-keyword">else</span> {
+                attrs = {};
+                attrs[key] = value;
+            }
+
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> attr <span class="hljs-keyword">in</span> attrs) {
+                <span class="hljs-keyword">if</span> (!_.has(attrs, attr)) {
+                    <span class="hljs-keyword">continue</span>;
+                }
+                <span class="hljs-keyword">if</span> (!_.has(attributes, attr)) {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-string">"Attribute '"</span> + attr + <span class="hljs-string">"' does not exist"</span>;
+                }
+                attrs[attr] = ensureType(attributes[attr], attrs[attr]);
+            }
+
+            <span class="hljs-keyword">return</span> oldSet.call(<span class="hljs-keyword">this</span>, attrs, options);
+        };
+
+        <span class="hljs-keyword">var</span> oldGet = proto.get;
+        childProto.get = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attr)</span> {</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.namedAttributes &amp;&amp; !_.has(<span class="hljs-keyword">this</span>.namedAttributes, attr)) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-string">"Attribute '"</span> + attr + <span class="hljs-string">"' does not exist"</span>;
+            }
+            <span class="hljs-keyword">return</span> oldGet.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Overrides Backbone’s <code>parse</code> method to parse only namedAttributes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">overrideParse</span><span class="hljs-params">(ctor, childCtor)</span> {</span>
+        <span class="hljs-keyword">var</span> proto = ctor.prototype;
+        <span class="hljs-keyword">var</span> childProto = childCtor.prototype;
+
+        <span class="hljs-keyword">var</span> oldParse = proto.parse;
+        childProto.parse = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response, options)</span> {</span>
+            <span class="hljs-keyword">return</span> _.pick(oldParse(response, options), _.keys(<span class="hljs-keyword">this</span>.namedAttributes));
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">applyExtensions</span><span class="hljs-params">(ctor)</span> {</span>
+        <span class="hljs-keyword">var</span> child = ctor.extend();
+        <span class="hljs-keyword">var</span> oldExtend = ctor.extend;
+        child.extend = generateMixinExtend(oldExtend);
+        <span class="hljs-keyword">return</span> child;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Applies extensions to the given constructor function. Sets <code>extend</code> to a method generated by <code>generateMixinExtend</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">applyModelExtensions</span><span class="hljs-params">(ctor)</span> {</span>
+        <span class="hljs-keyword">var</span> child = applyExtensions(ctor);
+        overrideSetGet(ctor, child);
+        overrideParse(ctor, child);
+        <span class="hljs-keyword">return</span> child;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
               <p>Extend base Backbone classes</p>
 
             </div>
@@ -1018,16 +1074,18 @@ A getter and setter for <code>id</code> is always generated.</p>
     Brace.Collection = applyExtensions(Backbone.Collection);
     Brace.View = applyExtensions(Backbone.View);
     Brace.Router = applyExtensions(Backbone.Router);
-    <span class="keyword">var</span> Evented = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-        <span class="keyword">this</span>.initialize.apply(<span class="keyword">this</span>, arguments);
+    <span class="hljs-keyword">var</span> Evented = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">this</span>.initialize.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
     };
     _.extend(Evented.prototype, Backbone.Events, {
-        initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>}
+        initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>}
     });
     Evented.extend = Backbone.Model.extend;
     Brace.Evented = applyExtensions(Evented);
 
-}());</pre></div></div>
+    <span class="hljs-keyword">return</span> Brace;
+
+}));</pre></div></div>
             
         </li>
         
